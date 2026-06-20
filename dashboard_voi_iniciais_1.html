@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Iniciais — VOI Advogados</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f0f0;font-family:'Segoe UI',Tahoma,sans-serif;color:#3C3C3C}
+.header{background:#8B1A3A;padding:16px 28px;display:flex;align-items:center;justify-content:space-between}
+.logo-placeholder{width:52px;height:52px;border-radius:50%;border:3px solid rgba(255,255,255,0.6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800;letter-spacing:1px;flex-shrink:0}
+.htitle{color:#fff;font-size:20px;font-weight:700}
+.hsub{color:rgba(255,255,255,0.65);font-size:12px;margin-top:3px}
+.hdate{color:rgba(255,255,255,0.85);font-size:12px;text-align:right;line-height:1.8}
+.content{padding:18px 22px}
+.sec-title{font-size:10px;font-weight:700;color:#8B1A3A;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.mc{background:#fff;border-radius:8px;padding:14px 16px;border-top:3px solid #8B1A3A}
+.mc.red{border-top-color:#B71C1C}.mc.orange{border-top-color:#E65100}
+.mc.green{border-top-color:#2E7D32}.mc.amber{border-top-color:#F57F17}
+.mc.dark{border-top-color:#3C3C3C}
+.mc-lbl{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}
+.mc-num{font-size:26px;font-weight:700;color:#3C3C3C;line-height:1}
+.mc-sub{font-size:10px;color:#bbb;margin-top:3px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.card{background:#fff;border-radius:8px;padding:16px 18px}
+.card-title{font-size:10px;font-weight:700;color:#8B1A3A;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+
+/* PRESCRIÇÃO */
+.presc-item{border-left:3px solid #B71C1C;padding:7px 10px;margin-bottom:5px;background:#fff8f8;border-radius:0 6px 6px 0;display:flex;justify-content:space-between;align-items:center}
+.presc-item.warn{border-left-color:#E65100;background:#fff9f5}
+.presc-item.prescrito{border-left-color:#7B1FA2;background:#fdf4ff}
+.pi-nome{font-size:11px;font-weight:600;color:#2C2C2C}
+.pi-etapa{font-size:9px;color:#aaa;margin-top:1px}
+.pi-badge{font-size:11px;font-weight:700;white-space:nowrap;margin-left:8px;display:flex;align-items:center;gap:4px}
+
+/* FUNIL */
+.funil-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.funil-lbl{font-size:10px;color:#555;width:180px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.funil-bar{height:18px;border-radius:3px;display:flex;align-items:center;padding:0 7px;min-width:28px}
+.funil-bar span{font-size:10px;font-weight:700;color:#fff}
+
+/* BARRAS RESPONSÁVEL EMPILHADAS */
+.rb-wrap{margin-bottom:8px}
+.rb-nome{font-size:11px;color:#3C3C3C;margin-bottom:3px;display:flex;justify-content:space-between}
+.rb-total{font-size:11px;font-weight:700;color:#3C3C3C}
+.rb-stack{display:flex;height:10px;border-radius:5px;overflow:hidden;gap:1px}
+.rb-seg{height:100%}
+.rb-legend{display:flex;gap:8px;margin-top:3px;flex-wrap:wrap}
+.rb-leg-item{font-size:9px;color:#888;display:flex;align-items:center;gap:3px}
+.rb-leg-dot{width:7px;height:7px;border-radius:2px}
+
+/* ALERTAS */
+.alert-box{border-radius:6px;padding:8px 12px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.al{font-size:11px;font-weight:600}
+.an{font-size:15px;font-weight:700}
+
+/* ALERTA FORA DA EQUIPE */
+.fora-item{padding:7px 10px;margin-bottom:5px;background:#fdf4ff;border-left:3px solid #7B1FA2;border-radius:0 6px 6px 0}
+.fora-nome{font-size:11px;font-weight:700;color:#4A148C}
+.fora-processos{font-size:10px;color:#888;margin-top:3px}
+
+/* PIZZA */
+.pizza-wrap{display:flex;flex-direction:column;align-items:center}
+.leg{display:flex;flex-direction:column;gap:5px;width:100%;margin-top:10px}
+.leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#555}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+.analise{background:#fff;border-radius:8px;padding:16px 20px;border-left:4px solid #8B1A3A;margin-bottom:14px}
+.analise-title{font-size:10px;font-weight:700;color:#8B1A3A;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.analise-item{font-size:12px;color:#444;line-height:1.7;padding:4px 0 4px 10px;border-bottom:1px solid #f5f5f5;border-left:3px solid transparent}
+.analise-item:last-child{border-bottom:none}
+.analise-item b{color:#8B1A3A}
+.ts{text-align:right;font-size:9px;color:#ccc;padding:4px 22px 16px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="display:flex;align-items:center;gap:16px">
+    <div class="logo-placeholder">VOI</div>
+    <div>
+      <div class="htitle">VOI Advogados — Dashboard de Iniciais</div>
+      <div class="hsub">Fase inicial até distribuição · Equipe de Confecção · Gestora: Bruna Carla</div>
+    </div>
+  </div>
+  <div class="hdate" id="hdate"></div>
+</div>
+
+<div class="content">
+
+  <div class="sec-title" style="margin-top:4px">Visão geral</div>
+  <div class="metrics">
+    <div class="mc dark"><div class="mc-lbl">Total em aberto</div><div class="mc-num">373</div><div class="mc-sub">processos ativos</div></div>
+    <div class="mc red"><div class="mc-lbl">🔴 Já prescritos</div><div class="mc-num">4</div><div class="mc-sub">ação imediata</div></div>
+    <div class="mc red"><div class="mc-lbl">⚠ Prescrevem &lt;15 dias</div><div class="mc-num">2</div><div class="mc-sub">urgente</div></div>
+    <div class="mc orange"><div class="mc-lbl">Distribuição urgente</div><div class="mc-num">106</div><div class="mc-sub">rescisão · prescrição · +5a</div></div>
+    <div class="mc amber"><div class="mc-lbl">Registro +5 anos</div><div class="mc-num">26</div><div class="mc-sub">perda diária de direito</div></div>
+  </div>
+
+  <!-- PRESCRIÇÕES -->
+  <div class="sec-title">Prescrições — Ação imediata</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">🔴 Prescrevem em até 30 dias</div>
+
+      <div style="font-size:9px;font-weight:700;color:#B71C1C;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">🔴 Menos de 15 dias — alerta crítico</div>
+      <div class="presc-item">
+        <div><div class="pi-nome">Ana Carolina Santana Pires</div><div class="pi-etapa">Matheus Scotti · Aguard. doc p/ distribuição</div></div>
+        <div class="pi-badge" style="color:#B71C1C">🔴 2 dias</div>
+      </div>
+      <div class="presc-item">
+        <div><div class="pi-nome">Kalebe Ferreira Souza</div><div class="pi-etapa">Rosane Bassan · Distribuição suspensa</div></div>
+        <div class="pi-badge" style="color:#B71C1C">🔴 15 dias</div>
+      </div>
+
+      <div style="font-size:9px;font-weight:700;color:#E65100;text-transform:uppercase;letter-spacing:.06em;margin:10px 0 5px">⚠️ 16 a 30 dias</div>
+      <div class="presc-item warn">
+        <div><div class="pi-nome">Gabriel Adriano Estrela Nunes</div><div class="pi-etapa">Bruna Carla · Aguard. geração da inicial</div></div>
+        <div class="pi-badge" style="color:#E65100">⚠️ 16 dias</div>
+      </div>
+      <div class="presc-item warn">
+        <div><div class="pi-nome">Augusto Alacrino</div><div class="pi-etapa">Matheus Scotti · Revisada c/ apontamentos</div></div>
+        <div class="pi-badge" style="color:#E65100">⚠️ 20 dias</div>
+      </div>
+      <div class="presc-item warn">
+        <div><div class="pi-nome">Pedro Paulo Paz da Silva</div><div class="pi-etapa">Amanda Faria · Aguard. cadastro de pedidos</div></div>
+        <div class="pi-badge" style="color:#E65100">⚠️ 26 dias</div>
+      </div>
+      <div class="presc-item warn">
+        <div><div class="pi-nome">Samira De Melo Mariotto</div><div class="pi-etapa">Matheus Scotti · Revisada c/ apontamentos</div></div>
+        <div class="pi-badge" style="color:#E65100">⚠️ 30 dias</div>
+      </div>
+
+      <div style="font-size:9px;font-weight:700;color:#7B1FA2;text-transform:uppercase;letter-spacing:.06em;margin:10px 0 5px">🟣 Processos já prescritos — verificar cadastro</div>
+      <div class="presc-item prescrito">
+        <div><div class="pi-nome">Osvaldo Porfírio da Silva</div><div class="pi-etapa">Aguard. cadastro de pedidos · 1992 dias vencido</div></div>
+        <div class="pi-badge" style="color:#7B1FA2">1992 dias</div>
+      </div>
+      <div class="presc-item prescrito">
+        <div><div class="pi-nome">CAIRO RODRIGO MARTINS FERRES</div><div class="pi-etapa">Aguard. cadastro de pedidos · 227 dias vencido</div></div>
+        <div class="pi-badge" style="color:#7B1FA2">227 dias</div>
+      </div>
+      <div class="presc-item prescrito">
+        <div><div class="pi-nome">Camila de Oliveira Correa</div><div class="pi-etapa">Inicial em andamento · 137 dias vencido</div></div>
+        <div class="pi-badge" style="color:#7B1FA2">137 dias</div>
+      </div>
+      <div class="presc-item prescrito">
+        <div><div class="pi-nome">Daiane Jacqueline da Silva</div><div class="pi-etapa">Aguard. cadastro de pedidos · 123 dias vencido</div></div>
+        <div class="pi-badge" style="color:#7B1FA2">123 dias</div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card">
+        <div class="card-title">Bloqueios ativos</div>
+        <div class="alert-box" style="background:#FFEBEE"><span class="al" style="color:#B71C1C">Falta doc p/ distribuição</span><span class="an" style="color:#B71C1C">21</span></div>
+        <div class="alert-box" style="background:#FFEBEE"><span class="al" style="color:#B71C1C">Distribuição suspensa</span><span class="an" style="color:#B71C1C">10</span></div>
+        <div class="alert-box" style="background:#FFF3E0"><span class="al" style="color:#E65100">Documentos faltantes</span><span class="an" style="color:#E65100">3</span></div>
+        <div class="alert-box" style="background:#FFF3E0"><span class="al" style="color:#E65100">Informações incompletas</span><span class="an" style="color:#E65100">2</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Tempo em aberto</div>
+        <div class="alert-box" style="background:#FFEBEE"><span class="al" style="color:#B71C1C">Mais de 120 dias</span><span class="an" style="color:#B71C1C">160</span></div>
+        <div class="alert-box" style="background:#FFF3E0"><span class="al" style="color:#E65100">60 a 120 dias</span><span class="an" style="color:#E65100">74</span></div>
+        <div class="alert-box" style="background:#FFFDE7"><span class="al" style="color:#F57F17">30 a 60 dias</span><span class="an" style="color:#F57F17">51</span></div>
+        <div class="alert-box" style="background:#F1F8E9"><span class="al" style="color:#2E7D32">Menos de 30 dias</span><span class="an" style="color:#2E7D32">88</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUNIL E PIZZA -->
+  <div class="sec-title">Funil e distribuição</div>
+  <div class="grid3">
+    <div class="card">
+      <div class="card-title">Etapas do funil</div>
+      <div class="funil-row"><div class="funil-lbl">Aguard. cadastro de pedidos</div><div class="funil-bar" style="background:#2E7D32;flex:75"><span>75</span></div></div>
+      <div class="funil-row"><div class="funil-lbl">Aguard. geração da inicial</div><div class="funil-bar" style="background:#388E3C;flex:66"><span>66</span></div></div>
+      <div class="funil-row"><div class="funil-lbl">Aguard. distribuição</div><div class="funil-bar" style="background:#E65100;flex:50"><span>50</span></div></div>
+      <div class="funil-row"><div class="funil-lbl">1ª Correção de inicial</div><div class="funil-bar" style="background:#8B1A3A;flex:40"><span>40</span></div></div>
+      <div class="funil-row"><div class="funil-lbl">Revisada c/ apontamentos</div><div class="funil-bar" style="background:#9C2040;flex:38"><span>38</span></div></div>
+      <div class="funil-row"><div class="funil-lbl">Checklist / análise</div><div class="funil-bar" style="background:#1565C0;flex:25"><span>25</span></div></div>
+      <div class="funil-row"><div class="funil-lbl">Inicial em andamento</div><div class="funil-bar" style="background:#1976D2;flex:24"><span>24</span></div></div>
+      <div class="funil-row"><div class="funil-lbl">Aguard. doc distribuição</div><div class="funil-bar" style="background:#B71C1C;flex:21"><span>21</span></div></div>
+      <div class="funil-row"><div class="funil-lbl">Distribuição suspensa</div><div class="funil-bar" style="background:#C62828;flex:10"><span>10</span></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Por tipo de fase</div>
+      <div class="pizza-wrap">
+        <canvas id="pizza1" width="160" height="160" role="img" aria-label="Pizza tipos de fase">Confecção 190, Correção 83, Distribuição 81, Contratação 19</canvas>
+        <div class="leg">
+          <div class="leg-item"><span class="leg-dot" style="background:#2E7D32"></span>Confecção — 190 (51%)</div>
+          <div class="leg-item"><span class="leg-dot" style="background:#8B1A3A"></span>Correção — 83 (22%)</div>
+          <div class="leg-item"><span class="leg-dot" style="background:#E65100"></span>Distribuição — 81 (22%)</div>
+          <div class="leg-item"><span class="leg-dot" style="background:#3C3C3C"></span>Contratação — 19 (5%)</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Urgências</div>
+      <div class="pizza-wrap">
+        <canvas id="pizza2" width="160" height="160" role="img" aria-label="Pizza urgências">Dist urgente 106, +5 anos 26, Prescrevem 30d 6, Prescritos 4</canvas>
+        <div class="leg">
+          <div class="leg-item"><span class="leg-dot" style="background:#E65100"></span>Distribuição urgente — 106</div>
+          <div class="leg-item"><span class="leg-dot" style="background:#F57F17"></span>Registro +5 anos — 26</div>
+          <div class="leg-item"><span class="leg-dot" style="background:#C62828"></span>Prescrevem 30d — 6</div>
+          <div class="leg-item"><span class="leg-dot" style="background:#7B1FA2"></span>Já prescritos — 4</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESPONSÁVEIS COM COMPOSIÇÃO -->
+  <div class="sec-title">Por responsável — composição por tipo de fase</div>
+  <div class="card" style="margin-bottom:14px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 40px">
+      <div>
+        <!-- MATHEUS -->
+        <div class="rb-wrap">
+          <div class="rb-nome"><span>Matheus Scotti</span><span class="rb-total">94</span></div>
+          <div class="rb-stack">
+            <div class="rb-seg" style="background:#8B1A3A;flex:43" title="Correção: 43"></div>
+            <div class="rb-seg" style="background:#E65100;flex:30" title="Distribuição: 30"></div>
+            <div class="rb-seg" style="background:#2E7D32;flex:21" title="Confecção: 21"></div>
+          </div>
+          <div class="rb-legend">
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#8B1A3A"></div>Correção 43</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#E65100"></div>Distribuição 30</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#2E7D32"></div>Confecção 21</div>
+          </div>
+        </div>
+        <!-- BRUNA -->
+        <div class="rb-wrap">
+          <div class="rb-nome"><span>Bruna Carla</span><span class="rb-total">60</span></div>
+          <div class="rb-stack">
+            <div class="rb-seg" style="background:#2E7D32;flex:55" title="Confecção: 55"></div>
+            <div class="rb-seg" style="background:#8B1A3A;flex:4" title="Correção: 4"></div>
+            <div class="rb-seg" style="background:#E65100;flex:1" title="Distribuição: 1"></div>
+          </div>
+          <div class="rb-legend">
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#2E7D32"></div>Confecção 55</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#8B1A3A"></div>Correção 4</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#E65100"></div>Distribuição 1</div>
+          </div>
+        </div>
+        <!-- AMANDA -->
+        <div class="rb-wrap">
+          <div class="rb-nome"><span>Amanda Faria</span><span class="rb-total">54</span></div>
+          <div class="rb-stack">
+            <div class="rb-seg" style="background:#2E7D32;flex:51" title="Confecção: 51"></div>
+            <div class="rb-seg" style="background:#E65100;flex:3" title="Distribuição: 3"></div>
+          </div>
+          <div class="rb-legend">
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#2E7D32"></div>Confecção 51</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#E65100"></div>Distribuição 3</div>
+          </div>
+        </div>
+        <!-- MARIA BEATRIZ -->
+        <div class="rb-wrap">
+          <div class="rb-nome"><span>Maria Beatriz</span><span class="rb-total">43</span></div>
+          <div class="rb-stack">
+            <div class="rb-seg" style="background:#2E7D32;flex:28" title="Confecção: 28"></div>
+            <div class="rb-seg" style="background:#8B1A3A;flex:13" title="Correção: 13"></div>
+            <div class="rb-seg" style="background:#E65100;flex:2" title="Distribuição: 2"></div>
+          </div>
+          <div class="rb-legend">
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#2E7D32"></div>Confecção 28</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#8B1A3A"></div>Correção 13</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#E65100"></div>Distribuição 2</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <!-- GISLAINE -->
+        <div class="rb-wrap">
+          <div class="rb-nome"><span>Gislaine Cristina</span><span class="rb-total">41</span></div>
+          <div class="rb-stack">
+            <div class="rb-seg" style="background:#2E7D32;flex:34" title="Confecção: 34"></div>
+            <div class="rb-seg" style="background:#E65100;flex:7" title="Distribuição: 7"></div>
+          </div>
+          <div class="rb-legend">
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#2E7D32"></div>Confecção 34</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#E65100"></div>Distribuição 7</div>
+          </div>
+        </div>
+        <!-- LAURA -->
+        <div class="rb-wrap">
+          <div class="rb-nome"><span>Laura Guimarães</span><span class="rb-total">30</span></div>
+          <div class="rb-stack">
+            <div class="rb-seg" style="background:#E65100;flex:30" title="Distribuição: 30"></div>
+          </div>
+          <div class="rb-legend">
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#E65100"></div>Distribuição 30</div>
+          </div>
+        </div>
+        <!-- GABRIELA -->
+        <div class="rb-wrap">
+          <div class="rb-nome"><span>Gabriela Martinez</span><span class="rb-total">28</span></div>
+          <div class="rb-stack">
+            <div class="rb-seg" style="background:#8B1A3A;flex:23" title="Correção: 23"></div>
+            <div class="rb-seg" style="background:#E65100;flex:4" title="Distribuição: 4"></div>
+            <div class="rb-seg" style="background:#3C3C3C;flex:1" title="Contratação: 1"></div>
+          </div>
+          <div class="rb-legend">
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#8B1A3A"></div>Correção 23</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#E65100"></div>Distribuição 4</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#3C3C3C"></div>Contratação 1</div>
+          </div>
+        </div>
+
+        <!-- LEGENDA GERAL -->
+        <div style="margin-top:12px;padding:10px;background:#f9f9f9;border-radius:7px">
+          <div style="font-size:9px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px">Legenda das cores</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#2E7D32"></div>Confecção</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#8B1A3A"></div>Correção</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#E65100"></div>Distribuição</div>
+            <div class="rb-leg-item"><div class="rb-leg-dot" style="background:#3C3C3C"></div>Contratação</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALERTA FORA DA EQUIPE -->
+  <div class="sec-title" style="color:#7B1FA2">⚠ Alerta para gestora Bruna — Responsáveis fora da equipe de confecção</div>
+  <div class="card" style="margin-bottom:14px;border-left:4px solid #7B1FA2">
+    <div class="card-title" style="color:#7B1FA2">Os responsáveis abaixo não fazem parte da equipe de confecção de inicial — verificar e reatribuir</div>
+    <div class="grid2" style="gap:8px">
+      <div>
+        <div class="fora-item">
+          <div class="fora-nome">⚠ Isabella Pozza — 7 processos</div>
+          <div class="fora-processos">6 em contratação · 1 distribuição · Closer, não confecção</div>
+        </div>
+        <div class="fora-item">
+          <div class="fora-nome">⚠ Vinicius Galhardo — 4 processos</div>
+          <div class="fora-processos">4 em contratação (aguardando assinatura) · Closer</div>
+        </div>
+        <div class="fora-item">
+          <div class="fora-nome">⚠ Patricia Guides — 3 processos</div>
+          <div class="fora-processos">3 em contratação (aguardando assinatura) · Closer</div>
+        </div>
+        <div class="fora-item">
+          <div class="fora-nome">⚠ Rosane Bassan — 3 processos</div>
+          <div class="fora-processos">3 distribuição suspensa · Verificar responsável correto</div>
+        </div>
+      </div>
+      <div>
+        <div class="fora-item">
+          <div class="fora-nome">⚠ Maria Isabella (SDR) — 2 processos</div>
+          <div class="fora-processos">2 em contratação · SDR, não confecção</div>
+        </div>
+        <div class="fora-item">
+          <div class="fora-nome">⚠ Rafael Izidoro — 2 processos</div>
+          <div class="fora-processos">2 em contratação (aguardando assinatura) · Diretor</div>
+        </div>
+        <div class="fora-item">
+          <div class="fora-nome">⚠ Dayana Mayara — 1 processo</div>
+          <div class="fora-processos">Dermival Silva de Oliveira · Fase execução</div>
+        </div>
+        <div class="fora-item">
+          <div class="fora-nome">⚠ Claudia Bearzotti — 1 processo</div>
+          <div class="fora-processos">Tatiane Alves Dias · Aguard. cadastro de pedidos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANÁLISE DO DIA -->
+  <div class="sec-title">Análise do dia</div>
+  <div class="analise">
+    <div class="analise-title">📋 Diagnóstico automático — <span id="adata"></span></div>
+    <div id="analise-corpo"></div>
+  </div>
+
+</div>
+<div class="ts" id="ts"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const now=new Date();
+const opts={weekday:'long',day:'2-digit',month:'long',year:'numeric'};
+const ds=now.toLocaleDateString('pt-BR',opts);
+const hs=now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+document.getElementById('hdate').innerHTML=ds+'<br>'+hs;
+document.getElementById('ts').textContent='Última atualização: '+ds+' às '+hs;
+document.getElementById('adata').textContent=ds;
+
+const itens=[
+  {c:'#B71C1C',t:'<b>⛔ 4 processos já prescritos</b> — verificar cadastros com possível erro de data e acionar gestora imediatamente para avaliação jurídica.'},
+  {c:'#B71C1C',t:'<b>🔴 Ana Carolina Santana Pires</b> prescreve em <b>2 dias (20/06/2026)</b> — parado em aguardando documentos. Responsável: Matheus Scotti. Ação urgente hoje.'},
+  {c:'#B71C1C',t:'<b>🔴 Kalebe Ferreira Souza</b> prescreve em 15 dias — distribuição suspensa. Responsável: Rosane Bassan. Atenção.'},
+  {c:'#E65100',t:'<b>⚠ 106 processos</b> marcados como distribuição urgente — rescisão indireta, prescrição iminente ou +5 anos de contrato.'},
+  {c:'#E65100',t:'<b>⚠ 26 processos</b> com registro superior a 5 anos — <b>perda de direito a cada dia de atraso.</b>'},
+  {c:'#7B1FA2',t:'<b>⚠ 22 processos com responsáveis fora da equipe</b> — closers e SDR aparecem como responsáveis de confecção. Gestora Bruna deve verificar e reatribuir.'},
+  {c:'#F57F17',t:'<b>📌 160 processos</b> em aberto há mais de 120 dias. Matheus Scotti concentra maior carga: 94 processos (43 em correção).'},
+  {c:'#3C3C3C',t:'<b>📊 Gargalo principal:</b> 141 processos nas etapas 2.2 e 2.3 (cadastro de pedidos e geração da inicial). Revisar capacidade da equipe.'},
+];
+const corpo=document.getElementById('analise-corpo');
+itens.forEach(i=>{
+  const d=document.createElement('div');
+  d.className='analise-item';
+  d.style.borderLeftColor=i.c;
+  d.innerHTML='<span style="font-size:12px;color:#444;line-height:1.7">'+i.t+'</span>';
+  corpo.appendChild(d);
+});
+
+new Chart(document.getElementById('pizza1'),{
+  type:'doughnut',
+  data:{labels:['Confecção','Correção','Distribuição','Contratação'],
+  datasets:[{data:[190,83,81,19],backgroundColor:['#2E7D32','#8B1A3A','#E65100','#3C3C3C'],borderWidth:2,borderColor:'#fff'}]},
+  options:{responsive:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.label+': '+c.raw+' ('+Math.round(c.raw/373*100)+'%)'}}}}
+});
+new Chart(document.getElementById('pizza2'),{
+  type:'doughnut',
+  data:{labels:['Dist. urgente','Registro +5a','Prescrevem 30d','Já prescritos'],
+  datasets:[{data:[106,26,6,4],backgroundColor:['#E65100','#F57F17','#C62828','#7B1FA2'],borderWidth:2,borderColor:'#fff'}]},
+  options:{responsive:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.label+': '+c.raw}}}}
+});
+</script>
+</body>
+</html>
