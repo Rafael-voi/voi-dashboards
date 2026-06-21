@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Comercial — VOI Advogados</title>
+<style>
+@keyframes pulse-red{0%,100%{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35)}50%{background:rgba(239,68,68,.3);border-color:rgba(239,68,68,.8)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.15}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0f1624;font-family:'Segoe UI',sans-serif;color:#fff;min-height:100vh}
+.header{background:linear-gradient(135deg,#1a2a5e,#0f1624);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08)}
+.hlogo{display:flex;align-items:center;gap:14px}
+.logo-img{width:52px;height:52px;object-fit:contain;border-radius:4px}
+.htitle{font-size:20px;font-weight:700}
+.hsub{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px}
+.hdate{color:rgba(255,255,255,.7);font-size:12px;text-align:right;line-height:1.7}
+.refresh-badge{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);font-size:10px;padding:3px 10px;border-radius:20px;margin-top:4px;display:inline-block}
+.tabs{display:flex;background:#0a1020;padding:0 20px;border-bottom:1px solid rgba(255,255,255,.06)}
+.tab{padding:12px 20px;font-size:12px;font-weight:600;color:rgba(255,255,255,.4);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:.2s}
+.tab.active,.tab:hover{color:#fff;border-bottom-color:#8B1A3A}
+.panel{display:none;padding:20px 22px}
+.panel.active{display:block}
+.st{font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.12em;margin:0 0 14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.card{background:rgba(255,255,255,.04);border-radius:10px;padding:16px 18px;border:1px solid rgba(255,255,255,.07)}
+.ct{font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.mn6{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
+.mc{background:rgba(255,255,255,.05);border-radius:10px;padding:14px 16px;border:1px solid rgba(255,255,255,.07)}
+.mc.g{border-top:3px solid #22c55e}.mc.r{border-top:3px solid #ef4444}
+.mc.o{border-top:3px solid #f97316}.mc.a{border-top:3px solid #eab308}
+.mc.b{border-top:3px solid #3b82f6}.mc.v{border-top:3px solid #8B1A3A}
+.ml{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+.mn{font-size:28px;font-weight:700;color:#fff;line-height:1}
+.ms{font-size:10px;color:rgba(255,255,255,.3);margin-top:3px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bar-lbl{font-size:12px;color:rgba(255,255,255,.65);width:190px;flex-shrink:0}
+.bar-track{flex:1;height:9px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px}
+.bar-n{font-size:13px;font-weight:700;color:#fff;width:26px;text-align:right;flex-shrink:0}
+.cl-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px}
+.tag{font-size:11px;padding:2px 10px;border-radius:20px;font-weight:600}
+.tag-g{background:rgba(34,197,94,.15);color:#22c55e}
+.tag-b{background:rgba(59,130,246,.15);color:#60a5fa}
+.tag-gy{background:rgba(255,255,255,.08);color:rgba(255,255,255,.35)}
+.tag-r{background:rgba(239,68,68,.15);color:#ef4444}
+.cc{background:linear-gradient(135deg,rgba(139,26,58,.12),rgba(255,255,255,.03));border-radius:12px;padding:18px 16px;border:1px solid rgba(139,26,58,.25)}
+.cc-h{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.cc-foto{width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center top;border:3px solid #8B1A3A;flex-shrink:0}
+.cc-nome{font-size:16px;font-weight:700}
+.cc-cargo{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-top:2px}
+.cc-taxa{font-size:26px;font-weight:700;color:#22c55e;margin-top:5px}
+.cc-taxa-lbl{font-size:9px;color:rgba(255,255,255,.3);text-transform:uppercase}
+.stats6{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.sb{background:rgba(0,0,0,.25);border-radius:7px;padding:8px;text-align:center}
+.sv{font-size:20px;font-weight:700}
+.sl{font-size:8px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-top:1px}
+.prog{height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-bottom:12px;overflow:hidden}
+.prog-f{height:100%;border-radius:2px;background:linear-gradient(90deg,#8B1A3A,#e05c7d)}
+.cc-sec{font-size:9px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.08em;margin:8px 0 6px}
+.pend-item{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:7px;margin-bottom:5px;border:1px solid}
+.pend-ok{background:rgba(234,179,8,.08);border-color:rgba(234,179,8,.2)}
+.pend-alerta{animation:pulse-red 1.5s ease-in-out infinite}
+.blink{animation:blink 1s ease-in-out infinite}
+.fut-item{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:rgba(59,130,246,.08);border-radius:6px;margin-bottom:4px}
+.venc-item{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.2);border-radius:6px;margin-bottom:4px}
+.sdr-card{background:linear-gradient(135deg,rgba(29,78,216,.12),rgba(255,255,255,.03));border-radius:12px;padding:18px 16px;border:1px solid rgba(29,78,216,.25)}
+.sdr-foto{width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center top;border:3px solid #1d4ed8;flex-shrink:0}
+.info-box{background:rgba(0,0,0,.2);border-radius:7px;padding:9px 12px;font-size:11px;color:rgba(255,255,255,.6);line-height:1.8;margin-bottom:10px}
+.dup-item{display:flex;align-items:center;gap:7px;padding:6px 10px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:6px;margin-bottom:4px;font-size:11px;color:rgba(255,255,255,.7)}
+.alert-s{background:rgba(255,255,255,.04);border-radius:10px;padding:16px 18px;border:1px solid rgba(255,255,255,.07);margin-bottom:12px}
+.alert-ct{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.alert-row{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;margin-bottom:7px;border:1px solid}
+.alert-r{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2)}
+.alert-o{background:rgba(249,115,22,.08);border-color:rgba(249,115,22,.2)}
+.alert-y{background:rgba(234,179,8,.08);border-color:rgba(234,179,8,.2)}
+.alert-b{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.2)}
+.alert-txt{font-size:12px;color:rgba(255,255,255,.75);line-height:1.6}
+.ts{text-align:right;font-size:9px;color:rgba(255,255,255,.2);padding:6px 22px 14px}
+.erro-box{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:14px;text-align:center;color:#ef4444;font-size:12px;margin:20px}
+
+/* FOTOS */
+.foto-vinicius{content:url('https://rafael-voi.github.io/voi-dashboards/vinicius.jpeg')}
+.foto-patricia{content:url('https://rafael-voi.github.io/voi-dashboards/patricia.jpeg')}
+.foto-isabella{content:url('https://rafael-voi.github.io/voi-dashboards/Isabela.jpeg')}
+.foto-douglas{content:url('https://rafael-voi.github.io/voi-dashboards/douglas.jpeg')}
+.foto-mariaisabella{content:url('https://rafael-voi.github.io/voi-dashboards/Maria Isabella.jpeg')}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="hlogo">
+    <img src="https://rafael-voi.github.io/voi-dashboards/Logo VOI Advogados_Prancheta 1.jpg" class="logo-img" alt="VOI">
+    <div>
+      <div class="htitle">VOI Advogados — Dashboard Comercial</div>
+      <div class="hsub" id="hsub">Carregando...</div>
+      <div class="refresh-badge" id="refresh-status">⟳ Carregando dados...</div>
+    </div>
+  </div>
+  <div class="hdate" id="hdate"></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="sw('funil',this)">🎯 Funil + Captação</div>
+  <div class="tab" onclick="sw('closers',this)">💼 Closers</div>
+  <div class="tab" onclick="sw('sdr',this)">📞 SDR</div>
+  <div class="tab" onclick="sw('alertas',this)">⚠️ Alertas</div>
+</div>
+
+<div id="panel-funil" class="panel active"><div class="info-box" style="margin:20px">⏳ Carregando dados...</div></div>
+<div id="panel-closers" class="panel"></div>
+<div id="panel-sdr" class="panel"></div>
+<div id="panel-alertas" class="panel"></div>
+<div class="ts" id="ts"></div>
+
+<script>
+const BASE = 'https://rafael-voi.github.io/voi-dashboards/';
+const JSON_URL = BASE + 'dashboard_comercial_voi_data.json';
+const FOTOS = {
+  'Vinicius Galhardo': BASE + 'vinicius.jpeg',
+  'Patricia Guides': BASE + 'patricia.jpeg',
+  'Isabella Pozza': BASE + 'Isabela.jpeg',
+  'Douglas Giuliano': BASE + 'douglas.jpeg',
+  'Maria Isabella': BASE + 'Maria Isabella.jpeg',
+};
+let countdown = 30 * 60;
+
+function dentroDoHorario(){const h=new Date().getHours();return h>=8&&h<19;}
+
+function atualizarContador(){
+  if(!dentroDoHorario()){document.getElementById('refresh-status').textContent='⏸ Atualização pausada fora do horário (8h–19h)';return;}
+  const m=Math.floor(countdown/60).toString().padStart(2,'0');
+  const s=(countdown%60).toString().padStart(2,'0');
+  document.getElementById('refresh-status').textContent='⟳ Próxima atualização em '+m+':'+s;
+  countdown--;
+  if(countdown<0){countdown=30*60;carregarDados();}
+}
+
+function sw(id,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  el.classList.add('active');
+}
+
+async function carregarDados(){
+  try{
+    const r=await fetch(JSON_URL+'?v='+Date.now());
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    renderizar(d);
+  }catch(e){
+    document.getElementById('panel-funil').innerHTML=`<div class="erro-box">⚠️ Não foi possível carregar os dados.<br><small>${e.message}</small></div>`;
+  }
+}
+
+function fotoCloser(nome){
+  if(nome.includes('Maria Isabella')) return BASE + 'Maria Isabella.jpeg';
+  if(nome.includes('Isabella')) return BASE + 'Isabela.jpeg';
+  if(nome.includes('Vinicius')) return BASE + 'vinicius.jpeg';
+  if(nome.includes('Patricia')) return BASE + 'patricia.jpeg';
+  if(nome.includes('Douglas')) return BASE + 'douglas.jpeg';
+  return '';
+}
+
+function renderizar(d){
+  const f=d.funil;
+  const cap=d.captacao;
+  const cl=d.closers||[];
+  const sdrs=d.sdrs||[];
+  const al=d.alertas||{};
+  const ai=d.analise_ia||{};
+  const per=d.periodo||{};
+
+  document.getElementById('hsub').textContent=(per.mes_referencia||'')+(per.mes_referencia?' · ':'')+' Atualizado automaticamente · SDR + Closers + Contratos';
+  document.getElementById('ts').textContent='Última atualização: '+(d.atualizado_em||'').replace('T',' ').substring(0,16)+' · Dados cruzados por código de pessoa';
+
+  // FUNIL
+  const maxFunil=f.sdr_clientes_unicos||1;
+  const pw=(v)=>Math.max(18,Math.round(v/maxFunil*300));
+  const maxCl=98;
+  const cw=(v)=>Math.max(18,Math.round(v/maxCl*300));
+  const contCloser=cap.contratos_por_closer||[];
+
+  document.getElementById('panel-funil').innerHTML=`
+  <div class="st">Funil geral + captação — ${per.mes_referencia||''}</div>
+  <div class="mn6">
+    <div class="mc b"><div class="ml">SDR atendeu</div><div class="mn">${f.sdr_registros_brutos}</div><div class="ms">registros brutos</div></div>
+    <div class="mc b"><div class="ml">Clientes únicos</div><div class="mn">${f.sdr_clientes_unicos}</div><div class="ms">após deduplicação</div></div>
+    <div class="mc a"><div class="ml">SDR → closer</div><div class="mn">${f.sdr_agendou_closer}</div><div class="ms">agendamentos</div></div>
+    <div class="mc g"><div class="ml">Contratos fechados</div><div class="mn">${f.contratos_total}</div><div class="ms">total geral</div></div>
+    <div class="mc o"><div class="ml">Pendente assinatura</div><div class="mn">${f.pendentes_assinatura}</div><div class="ms">aguardando cliente</div></div>
+    <div class="mc r"><div class="ml">Não compareceram</div><div class="mn">${f.nao_compareceram}</div><div class="ms">${f.sdr_clientes_unicos>0?Math.round(f.nao_compareceram/f.sdr_clientes_unicos*100):0}% dos atendidos</div></div>
+  </div>
+  <div class="g2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="ct">Funil SDR → closer → contrato</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="bar-lbl">SDR atendeu (únicos)</div><div style="background:#1d4ed8;height:24px;border-radius:4px;display:flex;align-items:center;padding:0 10px;width:300px"><span style="font-size:13px;font-weight:700;color:#fff">${f.sdr_clientes_unicos}</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="bar-lbl">→ Agendou pro closer</div><div style="background:#2563eb;height:24px;border-radius:4px;display:flex;align-items:center;padding:0 10px;width:${pw(f.sdr_agendou_closer)}px"><span style="font-size:13px;font-weight:700;color:#fff">${f.sdr_agendou_closer}</span></div><span style="font-size:12px;font-weight:700;color:#60a5fa;margin-left:6px">${f.sdr_clientes_unicos>0?Math.round(f.sdr_agendou_closer/f.sdr_clientes_unicos*100):0}%</span></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="bar-lbl">→ Fechou — Unidade VOI</div><div style="background:#16a34a;height:24px;border-radius:4px;display:flex;align-items:center;padding:0 10px;width:${pw(f.contratos_unidade_voi)}px"><span style="font-size:13px;font-weight:700;color:#fff">${f.contratos_unidade_voi}</span></div><span style="font-size:12px;font-weight:700;color:#22c55e;margin-left:6px">${f.sdr_clientes_unicos>0?Math.round(f.contratos_unidade_voi/f.sdr_clientes_unicos*100):0}%</span></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="bar-lbl">→ Fechou — CCC/externo</div><div style="background:#f97316;height:24px;border-radius:4px;display:flex;align-items:center;padding:0 10px;width:${pw(f.contratos_ccc_externo)}px"><span style="font-size:13px;font-weight:700;color:#fff">${f.contratos_ccc_externo}</span></div><span style="font-size:12px;font-weight:700;color:#f97316;margin-left:6px">${f.sdr_clientes_unicos>0?Math.round(f.contratos_ccc_externo/f.sdr_clientes_unicos*100):0}%</span></div>
+    </div>
+    <div class="card">
+      <div class="ct">Closers — conversão geral</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="bar-lbl">Total atendido (V+P+I)</div><div style="background:#4b5563;height:24px;border-radius:4px;display:flex;align-items:center;padding:0 10px;width:300px"><span style="font-size:13px;font-weight:700;color:#fff">${cl.reduce((s,c)=>s+c.total_atendidos,0)}</span></div></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="bar-lbl">→ Contratos fechados</div><div style="background:#22c55e;height:24px;border-radius:4px;display:flex;align-items:center;padding:0 10px;width:${cw(cl.reduce((s,c)=>s+c.contratos_fechados,0))}px"><span style="font-size:13px;font-weight:700;color:#fff">${cl.reduce((s,c)=>s+c.contratos_fechados,0)}</span></div><span style="font-size:12px;font-weight:700;color:#22c55e;margin-left:6px">${cl.reduce((s,c)=>s+c.total_atendidos,0)>0?Math.round(cl.reduce((s,c)=>s+c.contratos_fechados,0)/cl.reduce((s,c)=>s+c.total_atendidos,0)*100):0}%</span></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="bar-lbl">→ Não compareceram</div><div style="background:#ef4444;height:24px;border-radius:4px;display:flex;align-items:center;padding:0 10px;width:${cw(f.nao_compareceram)}px"><span style="font-size:13px;font-weight:700;color:#fff">${f.nao_compareceram}</span></div><span style="font-size:12px;font-weight:700;color:#ef4444;margin-left:6px">${cl.reduce((s,c)=>s+c.total_atendidos,0)>0?Math.round(f.nao_compareceram/cl.reduce((s,c)=>s+c.total_atendidos,0)*100):0}%</span></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><div class="bar-lbl">→ Pendente assinatura</div><div style="background:#f97316;height:24px;border-radius:4px;display:flex;align-items:center;padding:0 10px;width:${cw(f.pendentes_assinatura)}px"><span style="font-size:13px;font-weight:700;color:#fff">${f.pendentes_assinatura}</span></div><span style="font-size:12px;font-weight:700;color:#f97316;margin-left:6px">${cl.reduce((s,c)=>s+c.total_atendidos,0)>0?Math.round(f.pendentes_assinatura/cl.reduce((s,c)=>s+c.total_atendidos,0)*100):0}%</span></div>
+      <div style="margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        ${cl.map(c=>`<div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15);border-radius:7px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:700;color:${c.taxa_fechamento_pct>=35?'#22c55e':'#eab308'}">${c.taxa_fechamento_pct}%</div><div style="font-size:9px;color:rgba(255,255,255,.4);margin-top:2px">${c.nome.split(' ')[0]} · ${c.contratos_fechados}/${c.total_atendidos}</div></div>`).join('')}
+      </div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">Contratos por responsável — todos os ${f.contratos_total}</div>
+      ${contCloser.map(c=>`<div class="cl-row"><span style="font-size:13px;color:rgba(255,255,255,.8)">${c.nome}</span><span class="tag ${c.total>=10?'tag-g':c.total>=4?'tag-b':'tag-gy'}">${c.total} contrato${c.total!==1?'s':''}</span></div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="ct">Origem dos ${f.contratos_total} contratos</div>
+      ${(()=>{const max=cap.por_origem&&cap.por_origem.length>0?cap.por_origem[0].total:1;return(cap.por_origem||[]).map(o=>`<div class="bar-row"><div class="bar-lbl">${o.origem}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(o.total/max*100)}%;background:#8B1A3A"></div></div><div class="bar-n">${o.total}</div></div>`).join('');})()}
+      <div style="margin-top:10px;display:flex;justify-content:space-between">
+        <div style="background:rgba(139,26,58,.15);border:1px solid rgba(139,26,58,.3);border-radius:7px;padding:10px;text-align:center;flex:1;margin-right:6px"><div style="font-size:22px;font-weight:700;color:#e05c7d">${f.contratos_unidade_voi}</div><div style="font-size:9px;color:rgba(255,255,255,.4);margin-top:2px">Unidade VOI</div></div>
+        <div style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);border-radius:7px;padding:10px;text-align:center;flex:1;margin-right:6px"><div style="font-size:22px;font-weight:700;color:#f97316">${f.contratos_ccc_externo}</div><div style="font-size:9px;color:rgba(255,255,255,.4);margin-top:2px">CCC + Parceiros</div></div>
+        <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:7px;padding:10px;text-align:center;flex:1"><div style="font-size:22px;font-weight:700;color:#ef4444">${f.contratos_sem_captador}</div><div style="font-size:9px;color:rgba(255,255,255,.4);margin-top:2px">⚠ Sem captador</div></div>
+      </div>
+    </div>
+  </div>`;
+
+  // CLOSERS
+  document.getElementById('panel-closers').innerHTML=`
+  <div class="st">Performance Closers — ${per.mes_referencia||''}</div>
+  <div class="g3">
+  ${cl.map(c=>{
+    const foto=fotoCloser(c.nome);
+    const pends=c.pendentes_assinatura||[];
+    const futs=c.agendamentos_futuros||[];
+    const vencs=c.vencidos_sem_conclusao||[];
+    return `<div class="cc">
+      <div class="cc-h">
+        ${foto?`<img src="${foto}" class="cc-foto" onerror="this.style.display='none'" alt="${c.nome}">`:'<div class="cc-foto" style="background:rgba(139,26,58,.3);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700">${c.nome[0]}</div>'}
+        <div><div class="cc-nome">${c.nome}</div><div class="cc-cargo">Closer</div><div class="cc-taxa">${c.taxa_fechamento_pct}%</div><div class="cc-taxa-lbl">taxa de fechamento</div></div>
+      </div>
+      <div class="stats6">
+        <div class="sb"><div class="sv">${c.total_atendidos}</div><div class="sl">Atendidos</div></div>
+        <div class="sb"><div class="sv" style="color:#22c55e">${c.contratos_fechados}</div><div class="sl">Fechados</div></div>
+        <div class="sb"><div class="sv" style="color:#f97316">${pends.length}</div><div class="sl">Pendente</div></div>
+        <div class="sb"><div class="sv" style="color:#ef4444">${c.nao_compareceu}</div><div class="sl">Não comp.</div></div>
+        <div class="sb"><div class="sv" style="color:#60a5fa">${futs.length}</div><div class="sl">Futuros</div></div>
+        <div class="sb"><div class="sv" style="color:#eab308">${vencs.length}</div><div class="sl">⚠ Vencido</div></div>
+      </div>
+      <div class="prog"><div class="prog-f" style="width:${c.taxa_fechamento_pct}%"></div></div>
+      ${pends.length>0?`<div class="cc-sec">Pendentes de assinatura</div>${pends.map(p=>`<div class="pend-item ${p.alerta?'pend-alerta':'pend-ok'}"><div><div style="font-size:11px;font-weight:600">${p.cliente}</div>${p.alerta?`<div style="font-size:9px;color:rgba(255,255,255,.4)">Contatar urgente</div>`:''}</div><div style="display:flex;align-items:center;gap:3px"><div style="font-size:13px;font-weight:700;color:${p.alerta?'#ef4444':'#eab308'}">${p.dias_aguardando} dias</div>${p.alerta?`<div class="blink">🔴</div>`:''}</div></div>`).join('')}`:''}
+      ${vencs.length>0?`<div class="cc-sec" style="color:#eab308">⚠ Vencidos sem conclusão</div>${vencs.map(v=>`<div class="venc-item"><span style="font-size:11px;font-weight:500">${v.cliente}</span><span style="font-size:10px;color:rgba(255,255,255,.4)">Era ${v.data_era}</span></div>`).join('')}`:''}
+      ${futs.length>0?`<div class="cc-sec">Agendamentos futuros</div>${futs.map(f=>`<div class="fut-item"><span style="font-size:11px;color:rgba(255,255,255,.75)">${f.cliente}</span><span style="font-size:10px;color:#60a5fa;background:rgba(59,130,246,.15);padding:2px 7px;border-radius:8px">${f.data}</span></div>`).join('')}`:''}
+    </div>`;
+  }).join('')}
+  </div>`;
+
+  // SDR
+  document.getElementById('panel-sdr').innerHTML=`
+  <div class="st">Performance SDR — ${per.mes_referencia||''}</div>
+  <div class="g2" style="margin-bottom:16px">
+  ${sdrs.map(s=>{
+    const foto=fotoCloser(s.nome);
+    const dups=s.duplicatas_mesmo_dia||[];
+    return `<div class="sdr-card">
+      <div class="cc-h">
+        ${foto?`<img src="${foto}" class="sdr-foto" onerror="this.style.display='none'" alt="${s.nome}">`:'<div class="sdr-foto" style="background:rgba(29,78,216,.3);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;border:3px solid #1d4ed8">${s.nome[0]}</div>'}
+        <div><div class="cc-nome">${s.nome}</div><div class="cc-cargo">SDR</div><div style="font-size:24px;font-weight:700;color:#3b82f6;margin-top:5px">${s.taxa_conversao_pct}%</div><div style="font-size:9px;color:rgba(255,255,255,.3);text-transform:uppercase">taxa de conversão</div></div>
+      </div>
+      <div class="stats6">
+        <div class="sb"><div class="sv">${s.registros_brutos}</div><div class="sl">Registros</div></div>
+        <div class="sb"><div class="sv">${s.clientes_unicos}</div><div class="sl">Únicos</div></div>
+        <div class="sb"><div class="sv" style="color:#60a5fa">${s.agendou_closer}</div><div class="sl">Agend. closer</div></div>
+        <div class="sb"><div class="sv" style="color:#22c55e">${s.contratos_voi}</div><div class="sl">Fechou VOI</div></div>
+        <div class="sb"><div class="sv" style="color:#eab308">${s.contratos_ccc}</div><div class="sl">Fechou CCC</div></div>
+        <div class="sb"><div class="sv" style="color:#8b5cf6">${s.total_contratos}</div><div class="sl">Total fech.</div></div>
+      </div>
+      <div class="info-box">Dos <b style="color:#fff">${s.agendou_closer} agendamentos</b> → <b style="color:#22c55e">${s.total_contratos} contratos</b> = <b style="color:#22c55e">${s.taxa_conversao_pct}% conversão</b><br>${s.contratos_voi} Unidade VOI · ${s.contratos_ccc} captação externa</div>
+      ${s.funcao_closer_contratos>0?`<div style="background:rgba(139,26,58,.12);border:1px solid rgba(139,26,58,.3);border-radius:7px;padding:10px 12px;margin-bottom:8px"><div style="font-size:11px;font-weight:700;color:#e05c7d;margin-bottom:3px">+ Função de closer</div><div style="font-size:11px;color:rgba(255,255,255,.7)">${s.nome.split(' ')[0]} fechou <b style="color:#22c55e">${s.funcao_closer_contratos} contratos diretamente</b> como closer.</div></div>`:''}
+      ${dups.length>0?`<div class="ct" style="color:#ef4444;margin-bottom:6px">⚠ Cadastros duplicados no mesmo dia</div>${dups.map(d=>`<div class="dup-item">🔴 ${d.cliente} — ${d.data}</div>`).join('')}`:`<div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.15);border-radius:7px;padding:8px 12px;font-size:11px;color:rgba(255,255,255,.7)">✅ Nenhum cadastro duplicado.</div>`}
+    </div>`;
+  }).join('')}
+  </div>
+  <div class="card">
+    <div class="ct">Origem dos clientes atendidos pelo SDR</div>
+    ${(()=>{
+      const orig=[{o:'Google',n:87,c:'#3b82f6'},{o:'Indicação VOI',n:19,c:'#8b5cf6'},{o:'CCC/Campanha',n:16,c:'#f97316'},{o:'Parcerias',n:9,c:'#22c55e'},{o:'Facebook',n:7,c:'#0ea5e9'},{o:'Instagram',n:4,c:'#e91e63'},{o:'Não informado',n:7,c:'#6b7280'}];
+      const max=87;
+      return orig.map(o=>`<div class="bar-row"><div class="bar-lbl">${o.o}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(o.n/max*100)}%;background:${o.c}"></div></div><div class="bar-n">${o.n}</div></div>`).join('');
+    })()}
+  </div>`;
+
+  // ALERTAS
+  const pend5=(al.pendentes_assinatura_acima_5_dias||[]);
+  const vencs=(al.vencidos_sem_conclusao||[]);
+  const dups=(al.duplicatas_sdr||[]);
+  const semcap=(al.sem_captador||[]);
+
+  document.getElementById('panel-alertas').innerHTML=`
+  <div class="st">Alertas — Ação necessária</div>
+  ${pend5.length>0?`<div class="alert-s"><div class="alert-ct" style="color:#ef4444">🔴 Pendentes de assinatura acima de 5 dias</div>${pend5.map(a=>`<div class="alert-row alert-r"><div class="alert-txt"><b>${a.cliente}</b> — ${a.closer} · <b>${a.dias} dias aguardando</b> · Contatar hoje</div></div>`).join('')}</div>`:''}
+  ${vencs.length>0?`<div class="alert-s"><div class="alert-ct" style="color:#eab308">🟡 Vencidos sem conclusão</div>${vencs.map(v=>`<div class="alert-row alert-y"><div class="alert-txt"><b>${v.closer}:</b> ${v.cliente} (era ${v.data_era}) — preencher resultado</div></div>`).join('')}</div>`:''}
+  ${dups.length>0?`<div class="alert-s"><div class="alert-ct" style="color:#f97316">🟠 Cadastros duplicados — SDR</div>${dups.map(d=>`<div class="alert-row alert-o"><div class="alert-txt"><b>${d.cliente}</b> — cadastrado 2x em ${d.data} pelo SDR ${d.sdr}. Remover duplicata.</div></div>`).join('')}</div>`:''}
+  ${semcap.length>0?`<div class="alert-s"><div class="alert-ct" style="color:#eab308">🟡 Contratos sem captador</div>${semcap.map(s=>`<div class="alert-row alert-y"><div class="alert-txt"><b>${s.contrato}</b> — ${s.closer}. Corrigir no Datajuri.</div></div>`).join('')}</div>`:''}
+  <div class="alert-s">
+    <div class="alert-ct" style="color:#3b82f6">🔵 Análise do período</div>
+    ${ai.resumo_do_mes?`<div class="alert-row alert-b"><div class="alert-txt">${ai.resumo_do_mes}</div></div>`:''}
+    ${(ai.destaques_positivos||[]).map(d=>`<div class="alert-row alert-b"><div class="alert-txt">✅ ${d}</div></div>`).join('')}
+    ${(ai.alertas_criticos||[]).map(a=>`<div class="alert-row alert-r"><div class="alert-txt"><b>${a.responsavel}:</b> ${a.problema} → ${a.acao_recomendada}</div></div>`).join('')}
+  </div>`;
+}
+
+// Inicialização
+const now=new Date();
+document.getElementById('hdate').innerHTML=now.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})+'<br>'+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+carregarDados();
+setInterval(atualizarContador,1000);
+</script>
+</body>
+</html>
