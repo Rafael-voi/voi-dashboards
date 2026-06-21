@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Iniciais — VOI Advogados</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f0f0f0;font-family:'Segoe UI',Tahoma,sans-serif;color:#3C3C3C}
+.header{background:#8B1A3A;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.hlogo{display:flex;align-items:center;gap:14px}
+.logo-img{width:52px;height:52px;object-fit:contain;border-radius:4px}
+.htitle{color:#fff;font-size:20px;font-weight:700}
+.hsub{color:rgba(255,255,255,.65);font-size:12px;margin-top:3px}
+.hdate{color:rgba(255,255,255,.85);font-size:12px;text-align:right;line-height:1.8}
+.refresh-badge{background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);font-size:10px;padding:3px 10px;border-radius:20px;margin-top:4px;display:inline-block}
+.content{padding:16px 20px}
+.sec-title{font-size:10px;font-weight:700;color:#8B1A3A;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.mc{background:#fff;border-radius:8px;padding:13px 15px;border-top:3px solid #8B1A3A}
+.mc.red{border-top-color:#B71C1C}.mc.orange{border-top-color:#E65100}
+.mc.green{border-top-color:#2E7D32}.mc.amber{border-top-color:#F57F17}.mc.dark{border-top-color:#3C3C3C}
+.ml{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.mn{font-size:26px;font-weight:700;color:#3C3C3C;line-height:1}
+.ms{font-size:10px;color:#bbb;margin-top:3px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.g3{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.card{background:#fff;border-radius:8px;padding:14px 16px}
+.ct{font-size:10px;font-weight:700;color:#8B1A3A;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.presc-item{border-left:3px solid #B71C1C;padding:6px 10px;margin-bottom:5px;background:#fff8f8;border-radius:0 6px 6px 0;display:flex;justify-content:space-between;align-items:center}
+.presc-item.warn{border-left-color:#E65100;background:#fff9f5}
+.presc-item.prescrito{border-left-color:#7B1FA2;background:#fdf4ff}
+.pi-nome{font-size:11px;font-weight:600;color:#2C2C2C}
+.pi-etapa{font-size:9px;color:#aaa;margin-top:1px}
+.pi-dias{font-size:12px;font-weight:700;white-space:nowrap;margin-left:8px}
+.ab{border-radius:6px;padding:7px 11px;margin-bottom:5px;display:flex;justify-content:space-between;align-items:center}
+.al{font-size:11px;font-weight:600}
+.an{font-size:14px;font-weight:700}
+.funil-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.funil-lbl{font-size:10px;color:#555;width:185px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.funil-bar{height:18px;border-radius:3px;display:flex;align-items:center;padding:0 7px}
+.funil-bar span{font-size:10px;font-weight:700;color:#fff}
+.rb-wrap{margin-bottom:8px}
+.rb-nome{font-size:11px;color:#3C3C3C;margin-bottom:3px;display:flex;justify-content:space-between;align-items:center}
+.rb-foto{width:24px;height:24px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid #8B1A3A;flex-shrink:0;margin-right:6px}
+.rb-stack{display:flex;height:9px;border-radius:4px;overflow:hidden;gap:1px}
+.rb-seg{height:100%}
+.rb-legend{display:flex;gap:8px;margin-top:2px;flex-wrap:wrap}
+.rb-leg-item{display:flex;align-items:center;gap:3px;font-size:9px;color:#888}
+.rb-leg-dot{width:7px;height:7px;border-radius:2px}
+.fora-item{padding:6px 10px;margin-bottom:4px;background:#fdf4ff;border-left:3px solid #7B1FA2;border-radius:0 6px 6px 0}
+.fora-nome{font-size:11px;font-weight:700;color:#4A148C}
+.fora-det{font-size:9px;color:#888;margin-top:1px}
+.pz{display:flex;flex-direction:column;align-items:center}
+.lg{display:flex;flex-direction:column;gap:4px;width:100%;margin-top:8px}
+.li{display:flex;align-items:center;gap:5px;font-size:10px;color:#555}
+.ld{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.analise{background:#fff;border-radius:8px;padding:14px 18px;border-left:4px solid #8B1A3A;margin-bottom:12px}
+.analise-ct{font-size:10px;font-weight:700;color:#8B1A3A;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.analise-item{font-size:11px;color:#444;line-height:1.7;padding:3px 0 3px 8px;border-bottom:1px solid #f5f5f5;border-left:3px solid transparent;margin-bottom:2px}
+.analise-item:last-child{border-bottom:none}
+.erro-box{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:14px;text-align:center;color:#856404;font-size:12px}
+.ts{text-align:right;font-size:9px;color:#ccc;padding:4px 20px 12px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="hlogo">
+    <img src="https://rafael-voi.github.io/voi-dashboards/Logo VOI Advogados_Prancheta 1.jpg" class="logo-img" alt="VOI Advogados">
+    <div>
+      <div class="htitle">VOI Advogados — Dashboard de Iniciais</div>
+      <div class="hsub">Fase inicial até distribuição · Equipe de Confecção · Gestora: Bruna Moura</div>
+      <div class="refresh-badge" id="refresh-status">⟳ Carregando dados...</div>
+    </div>
+  </div>
+  <div class="hdate" id="hdate"></div>
+</div>
+
+<div class="content" id="conteudo">
+  <div class="analise" style="margin-top:8px">
+    <div class="analise-ct">⏳ Carregando dashboard...</div>
+    <div style="font-size:12px;color:#888">Buscando dados atualizados. Aguarde.</div>
+  </div>
+</div>
+<div class="ts" id="ts"></div>
+
+<script>
+const BASE_URL = 'https://rafael-voi.github.io/voi-dashboards/';
+const JSON_URL = BASE_URL + 'dashboard_voi_iniciais_data.json';
+const INTERVALO_MS = 30 * 60 * 1000;
+let countdown = INTERVALO_MS / 1000;
+let chart1, chart2;
+
+const FOTOS = {
+  'Matheus Scotti': BASE_URL + 'Matheus Scotti.jpeg',
+  'Bruna Moura': BASE_URL + 'Bruna Moura.jpeg',
+  'Amanda Faria': BASE_URL + 'Amanda Faria.png',
+  'Maria Beatriz': BASE_URL + 'Maria Beatriz.jpeg',
+  'Gislaine Cristina': BASE_URL + 'Gislaine Cristina.jpeg',
+  'Laura Guimarães': BASE_URL + 'Laura.jpeg',
+  'Gabriela Martinez': BASE_URL + 'Gabriela Martinez.jpeg',
+};
+
+const CORES_FASE = {
+  'Confecção': '#2E7D32',
+  'Correção': '#8B1A3A',
+  'Distribuição': '#E65100',
+  'Contratação': '#3C3C3C',
+  'Trâmite Judicial': '#1565C0',
+};
+
+function dentroDoHorario() {
+  const h = new Date().getHours();
+  return h >= 8 && h < 19;
+}
+
+function atualizarContador() {
+  if (!dentroDoHorario()) {
+    document.getElementById('refresh-status').textContent = '⏸ Atualização pausada fora do horário (8h–19h)';
+    return;
+  }
+  const m = Math.floor(countdown / 60).toString().padStart(2, '0');
+  const s = (countdown % 60).toString().padStart(2, '0');
+  document.getElementById('refresh-status').textContent = '⟳ Próxima atualização em ' + m + ':' + s;
+  countdown--;
+  if (countdown < 0) {
+    countdown = INTERVALO_MS / 1000;
+    carregarDados();
+  }
+}
+
+async function carregarDados() {
+  try {
+    const resp = await fetch(JSON_URL + '?v=' + Date.now());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const d = await resp.json();
+    renderizarDashboard(d);
+  } catch (e) {
+    document.getElementById('conteudo').innerHTML = `
+      <div class="erro-box" style="margin-top:16px">
+        ⚠️ Não foi possível carregar os dados. Verifique a conexão.<br>
+        <small>${e.message}</small>
+      </div>`;
+  }
+}
+
+function renderizarDashboard(d) {
+  const v = d.visao_geral;
+  const p = d.prescricoes;
+  const f = d.funil;
+  const r = d.responsaveis;
+  const fe = d.fora_da_equipe;
+  const t = d.tempo_em_aberto;
+  const b = d.bloqueios || [];
+  const ai = d.analise_ia;
+
+  const maxEtapa = f.por_etapa_fase.length > 0 ? f.por_etapa_fase[0].total : 1;
+
+  // Destruir gráficos antigos
+  if (chart1) chart1.destroy();
+  if (chart2) chart2.destroy();
+
+  document.getElementById('conteudo').innerHTML = `
+  <div class="sec-title" style="margin-top:4px">Visão geral</div>
+  <div class="metrics">
+    <div class="mc dark"><div class="ml">Total em aberto</div><div class="mn" id="m-total">${v.total_processos}</div><div class="ms">processos ativos</div></div>
+    <div class="mc red"><div class="ml">🔴 Já prescritos</div><div class="mn">${v.ja_prescrito}</div><div class="ms">ação imediata</div></div>
+    <div class="mc red"><div class="ml">⚠ Prescrevem &lt;15d</div><div class="mn">${v.prescricao_critica}</div><div class="ms">urgente</div></div>
+    <div class="mc orange"><div class="ml">Distribuição urgente</div><div class="mn">${v.distribuicao_urgente}</div><div class="ms">rescisão·prescrição·+5a</div></div>
+    <div class="mc amber"><div class="ml">Registro +5 anos</div><div class="mn">${v.registro_mais_5_anos}</div><div class="ms">perda diária de direito</div></div>
+  </div>
+
+  <div class="sec-title">Prescrições — Ação imediata</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">🔴 Prescrevem em até 30 dias + já prescritos</div>
+      ${p.critico_0_15.length > 0 ? `<div style="font-size:9px;font-weight:700;color:#B71C1C;text-transform:uppercase;margin-bottom:4px">🔴 Crítico — menos de 15 dias</div>` : ''}
+      ${p.critico_0_15.map(x => `
+        <div class="presc-item">
+          <div><div class="pi-nome">${x.cliente}</div><div class="pi-etapa">${x.responsavel} · ${x.etapa}</div></div>
+          <div class="pi-dias" style="color:#B71C1C">${x.dias === 0 ? '🔴 HOJE' : '🔴 ' + x.dias + ' dias'}</div>
+        </div>`).join('')}
+      ${p.urgente_16_30.length > 0 ? `<div style="font-size:9px;font-weight:700;color:#E65100;text-transform:uppercase;margin:8px 0 4px">⚠️ 16 a 30 dias</div>` : ''}
+      ${p.urgente_16_30.map(x => `
+        <div class="presc-item warn">
+          <div><div class="pi-nome">${x.cliente}</div><div class="pi-etapa">${x.responsavel} · ${x.etapa}</div></div>
+          <div class="pi-dias" style="color:#E65100">⚠️ ${x.dias}d</div>
+        </div>`).join('')}
+      ${p.ja_prescrito.length > 0 ? `<div style="font-size:9px;font-weight:700;color:#7B1FA2;text-transform:uppercase;margin:8px 0 4px">🟣 Já prescritos — verificar cadastro</div>` : ''}
+      ${p.ja_prescrito.map(x => `
+        <div class="presc-item prescrito">
+          <div><div class="pi-nome">${x.cliente}</div><div class="pi-etapa">${x.responsavel} · ${x.etapa}</div></div>
+          <div class="pi-dias" style="color:#7B1FA2">${Math.abs(x.dias)}d</div>
+        </div>`).join('')}
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="card">
+        <div class="ct">Bloqueios ativos</div>
+        ${b.map(x => `<div class="ab" style="background:#FFEBEE"><span class="al" style="color:#B71C1C">${x.tipo}</span><span class="an" style="color:#B71C1C">${x.total}</span></div>`).join('')}
+      </div>
+      <div class="card">
+        <div class="ct">Tempo em aberto</div>
+        <div class="ab" style="background:#FFEBEE"><span class="al" style="color:#B71C1C">Mais de 120 dias</span><span class="an" style="color:#B71C1C">${t.mais_120_dias}</span></div>
+        <div class="ab" style="background:#FFF3E0"><span class="al" style="color:#E65100">60 a 120 dias</span><span class="an" style="color:#E65100">${t.entre_60_120}</span></div>
+        <div class="ab" style="background:#FFFDE7"><span class="al" style="color:#F57F17">30 a 60 dias</span><span class="an" style="color:#F57F17">${t.entre_30_60}</span></div>
+        <div class="ab" style="background:#F1F8E9"><span class="al" style="color:#2E7D32">Menos de 30 dias</span><span class="an" style="color:#2E7D32">${t.menos_30}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">Funil e distribuição</div>
+  <div class="g3">
+    <div class="card">
+      <div class="ct">Etapas do funil</div>
+      ${f.por_etapa_fase.map(x => {
+        const w = Math.max(28, Math.round(x.total / maxEtapa * 200));
+        const cores = ['#2E7D32','#388E3C','#E65100','#8B1A3A','#9C2040','#1565C0','#1976D2','#B71C1C','#C62828','#F57F17'];
+        const idx = f.por_etapa_fase.indexOf(x);
+        return `<div class="funil-row"><div class="funil-lbl" title="${x.etapa}">${x.etapa}</div><div class="funil-bar" style="background:${cores[idx%cores.length]};width:${w}px"><span>${x.total}</span></div></div>`;
+      }).join('')}
+    </div>
+    <div class="card">
+      <div class="ct">Por tipo de fase</div>
+      <div class="pz">
+        <canvas id="pizza1" width="150" height="150"></canvas>
+        <div class="lg">
+          ${f.por_tipo_fase.map(x => `<div class="li"><span class="ld" style="background:${CORES_FASE[x.tipo]||'#888'}"></span>${x.tipo} — ${x.total}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Urgências</div>
+      <div class="pz">
+        <canvas id="pizza2" width="150" height="150"></canvas>
+        <div class="lg">
+          <div class="li"><span class="ld" style="background:#E65100"></span>Dist. urgente — ${v.distribuicao_urgente}</div>
+          <div class="li"><span class="ld" style="background:#F57F17"></span>Registro +5a — ${v.registro_mais_5_anos}</div>
+          <div class="li"><span class="ld" style="background:#C62828"></span>Prescrevem 30d — ${(p.critico_0_15.length + p.urgente_16_30.length)}</div>
+          <div class="li"><span class="ld" style="background:#7B1FA2"></span>Já prescritos — ${v.ja_prescrito}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">Por responsável — composição por tipo de fase</div>
+  <div class="card" style="margin-bottom:12px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 32px">
+      ${r.map(resp => {
+        const segs = Object.entries(resp.composicao).map(([tipo, n]) =>
+          `<div class="rb-seg" style="background:${CORES_FASE[tipo]||'#888'};flex:${n}" title="${tipo}: ${n}"></div>`
+        ).join('');
+        const legs = Object.entries(resp.composicao).map(([tipo, n]) =>
+          `<div class="rb-leg-item"><div class="rb-leg-dot" style="background:${CORES_FASE[tipo]||'#888'}"></div>${tipo.substring(0,4)}. ${n}</div>`
+        ).join('');
+        const foto = FOTOS[resp.nome] ? `<img src="${FOTOS[resp.nome]}" class="rb-foto" onerror="this.style.display='none'">` : '';
+        return `
+        <div class="rb-wrap">
+          <div class="rb-nome">
+            <span style="display:flex;align-items:center">${foto}${resp.nome}</span>
+            <span style="font-weight:700">${resp.total}</span>
+          </div>
+          <div class="rb-stack">${segs}</div>
+          <div class="rb-legend">${legs}</div>
+        </div>`;
+      }).join('')}
+      <div style="padding:8px;background:#f9f9f9;border-radius:6px;align-self:end">
+        <div style="font-size:9px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:5px">Legenda de cores</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          ${Object.entries(CORES_FASE).map(([tipo, cor]) => `<div class="rb-leg-item"><div class="rb-leg-dot" style="background:${cor}"></div>${tipo}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="color:#7B1FA2">⚠ Alerta — Responsáveis fora da equipe de confecção</div>
+  <div class="card" style="margin-bottom:12px;border-left:4px solid #7B1FA2">
+    <div class="ct" style="color:#7B1FA2">Processos com responsáveis que não fazem parte da equipe — gestora Bruna Moura deve reatribuir</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      ${fe.map(f => {
+        const comp = Object.entries(f.composicao).map(([t,n]) => `${n} ${t}`).join(' · ');
+        return `<div class="fora-item"><div class="fora-nome">⚠ ${f.responsavel} — ${f.total} processo${f.total>1?'s':''}</div><div class="fora-det">${comp}</div></div>`;
+      }).join('')}
+    </div>
+  </div>
+
+  <div class="sec-title">Análise do dia — IA</div>
+  <div class="analise">
+    <div class="analise-ct">📋 Diagnóstico — atualizado em ${d.atualizado_em ? d.atualizado_em.replace('T',' ').substring(0,16) : ''}</div>
+    <div class="analise-item" style="border-left-color:#3C3C3C">${ai.resumo_do_dia}</div>
+    ${(ai.alertas_criticos||[]).map(a => `
+      <div class="analise-item" style="border-left-color:#B71C1C"><b>${a.responsavel}:</b> ${a.problema} → ${a.acao_recomendada}</div>`).join('')}
+    ${(ai.acoes_para_bruna_moura||[]).map(a => `
+      <div class="analise-item" style="border-left-color:#E65100">${a}</div>`).join('')}
+  </div>
+  `;
+
+  // Gráficos
+  chart1 = new Chart(document.getElementById('pizza1'), {
+    type: 'doughnut',
+    data: {
+      labels: f.por_tipo_fase.map(x => x.tipo),
+      datasets: [{
+        data: f.por_tipo_fase.map(x => x.total),
+        backgroundColor: f.por_tipo_fase.map(x => CORES_FASE[x.tipo] || '#888'),
+        borderWidth: 2, borderColor: '#fff'
+      }]
+    },
+    options: {responsive:false, plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>c.label+': '+c.raw}}}}
+  });
+
+  chart2 = new Chart(document.getElementById('pizza2'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Dist. urgente', 'Registro +5a', 'Prescrevem 30d', 'Já prescritos'],
+      datasets: [{
+        data: [v.distribuicao_urgente, v.registro_mais_5_anos, p.critico_0_15.length + p.urgente_16_30.length, v.ja_prescrito],
+        backgroundColor: ['#E65100','#F57F17','#C62828','#7B1FA2'],
+        borderWidth: 2, borderColor: '#fff'
+      }]
+    },
+    options: {responsive:false, plugins:{legend:{display:false}}}
+  });
+
+  document.getElementById('ts').textContent = 'Última atualização: ' + new Date().toLocaleString('pt-BR');
+}
+
+// Inicialização
+const now = new Date();
+document.getElementById('hdate').innerHTML = now.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'}) + '<br>' + now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+
+carregarDados();
+setInterval(atualizarContador, 1000);
+</script>
+</body>
+</html>

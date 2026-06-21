@@ -1,0 +1,448 @@
+{
+  "atualizado_em": "2026-06-20T20:00:00-03:00",
+  "periodo": {
+    "data_referencia": "2026-06-20",
+    "horario_comercial": false,
+    "proxima_atualizacao": "2026-06-21T08:00:00-03:00"
+  },
+  "visao_geral": {
+    "total_processos": 377,
+    "em_contratacao": 19,
+    "em_confeccao": 190,
+    "em_correcao": 83,
+    "em_distribuicao": 81,
+    "em_tramite": 0,
+    "distribuicao_urgente": 106,
+    "registro_mais_5_anos": 26,
+    "prescricao_critica": 3,
+    "ja_prescrito": 4
+  },
+  "prescricoes": {
+    "ja_prescrito": [
+      {
+        "pasta": "6.447801783017007e+16",
+        "cliente": "Osvaldo Porfírio da Silva",
+        "responsavel": "Amanda Faria",
+        "etapa": "2.2 - Aguardando Cadastro de pedidos (pedidos via IA + pedidos CCT)",
+        "dias": -1994
+      },
+      {
+        "pasta": "6.4478017830169944e+16",
+        "cliente": "CAIRO RODRIGO MARTINS FERRES",
+        "responsavel": "Amanda Faria",
+        "etapa": "2.2 - Aguardando Cadastro de pedidos (pedidos via IA + pedidos CCT)",
+        "dias": -229
+      },
+      {
+        "pasta": "6.4478017830169816e+16",
+        "cliente": "Camila de Oliveira Correa",
+        "responsavel": "Bruna Moura",
+        "etapa": "2.4 - Inicial em andamento",
+        "dias": -139
+      },
+      {
+        "pasta": "6.447801783017006e+16",
+        "cliente": "Daiane Jacqueline da Silva",
+        "responsavel": "Gislaine Cristina",
+        "etapa": "2.2 - Aguardando Cadastro de pedidos (pedidos via IA + pedidos CCT)",
+        "dias": -125
+      }
+    ],
+    "critico_0_15": [
+      {
+        "pasta": "6.447801783016885e+16",
+        "cliente": "Ana Carolina Santana Pires",
+        "responsavel": "Matheus Scotti",
+        "etapa": "4.1 - Aguardando documentos para Distribuição da Inicial",
+        "dias": 0
+      },
+      {
+        "pasta": "6.447801783016809e+16",
+        "cliente": "Kalebe Ferreira Souza",
+        "responsavel": "Rosane Ramos Bassan",
+        "etapa": "4.2 - Distribuição Suspensa (proc. que precisa aguardar uma data ou autorização do cliente)",
+        "dias": 13
+      },
+      {
+        "pasta": "6.447801783016928e+16",
+        "cliente": "Gabriel Adriano Estrela Nunes",
+        "responsavel": "Bruna Moura",
+        "etapa": "2.3 - Aguardando Geração da Inicial (Automatizada)",
+        "dias": 14
+      }
+    ],
+    "urgente_16_30": [
+      {
+        "pasta": "6.447801783016757e+16",
+        "cliente": "Augusto Alacrino",
+        "responsavel": "Matheus Scotti",
+        "etapa": "3.4 - Inicial revisada com Apontamentos - Apos Distribuir",
+        "dias": 18
+      },
+      {
+        "pasta": "6.447801783016985e+16",
+        "cliente": "Pedro Paulo Paz da Silva",
+        "responsavel": "Amanda Faria",
+        "etapa": "2.2 - Aguardando Cadastro de pedidos (pedidos via IA + pedidos CCT)",
+        "dias": 24
+      },
+      {
+        "pasta": "6.447801783016827e+16",
+        "cliente": "Samira De Melo Mariotto",
+        "responsavel": "Matheus Scotti",
+        "etapa": "3.4 - Inicial revisada com Apontamentos - Apos Distribuir",
+        "dias": 28
+      }
+    ]
+  },
+  "funil": {
+    "por_tipo_fase": [
+      {
+        "tipo": "Contratação",
+        "total": 19
+      },
+      {
+        "tipo": "Confecção",
+        "total": 190
+      },
+      {
+        "tipo": "Correção",
+        "total": 83
+      },
+      {
+        "tipo": "Distribuição",
+        "total": 81
+      }
+    ],
+    "por_etapa_fase": [
+      {
+        "etapa": "2.2 - Aguardando Cadastro de pedidos (pedidos via IA + pedidos CCT)",
+        "total": 75
+      },
+      {
+        "etapa": "2.3 - Aguardando Geração da Inicial (Automatizada)",
+        "total": 66
+      },
+      {
+        "etapa": "4.0 - Aguardando Distribuição da Inicial",
+        "total": 50
+      },
+      {
+        "etapa": "3.1 - 1ª Correção de Inicial",
+        "total": 40
+      },
+      {
+        "etapa": "3.4 - Inicial revisada com Apontamentos - Apos Distribuir",
+        "total": 38
+      },
+      {
+        "etapa": "2.1 - Fase de Checklist - Análise da Fase",
+        "total": 25
+      },
+      {
+        "etapa": "2.4 - Inicial em andamento",
+        "total": 24
+      },
+      {
+        "etapa": "4.1 - Aguardando documentos para Distribuição da Inicial",
+        "total": 21
+      },
+      {
+        "etapa": "4.2 - Distribuição Suspensa (proc. que precisa aguardar uma data ou autorização do cliente)",
+        "total": 10
+      },
+      {
+        "etapa": "1.8 - ( Contratação ) - Aguardando Assinatura de Contrato",
+        "total": 7
+      }
+    ]
+  },
+  "responsaveis": [
+    {
+      "nome": "Matheus Scotti",
+      "total": 94,
+      "composicao": {
+        "Confecção": 21,
+        "Correção": 43,
+        "Distribuição": 30
+      }
+    },
+    {
+      "nome": "Bruna Moura",
+      "total": 60,
+      "composicao": {
+        "Confecção": 55,
+        "Correção": 4,
+        "Distribuição": 1
+      }
+    },
+    {
+      "nome": "Amanda Faria",
+      "total": 54,
+      "composicao": {
+        "Confecção": 51,
+        "Distribuição": 3
+      }
+    },
+    {
+      "nome": "Maria Beatriz",
+      "total": 43,
+      "composicao": {
+        "Confecção": 28,
+        "Correção": 13,
+        "Distribuição": 2
+      }
+    },
+    {
+      "nome": "Gislaine Cristina",
+      "total": 41,
+      "composicao": {
+        "Confecção": 34,
+        "Distribuição": 7
+      }
+    },
+    {
+      "nome": "Laura Guimarães",
+      "total": 30,
+      "composicao": {
+        "Distribuição": 30
+      }
+    },
+    {
+      "nome": "Gabriela Martinez",
+      "total": 28,
+      "composicao": {
+        "Contratação": 1,
+        "Correção": 23,
+        "Distribuição": 4
+      }
+    }
+  ],
+  "fora_da_equipe": [
+    {
+      "responsavel": "Claudia Bearzotti Pompeu",
+      "total": 1,
+      "composicao": {
+        "Confecção": 1
+      },
+      "processos": [
+        {
+          "pasta": "6.447801783016863e+16",
+          "cliente": "Tatiane Alves Dias",
+          "etapa": "2.2 - Aguardando Cadastro de pedidos (pedidos via IA + pedidos CCT)"
+        }
+      ]
+    },
+    {
+      "responsavel": "Dayana Mayara da Silva Ferreira Araujo",
+      "total": 1,
+      "composicao": {
+        "Contratação": 1
+      },
+      "processos": [
+        {
+          "pasta": "6.4478017830170104e+16",
+          "cliente": "Dermival Silva de Oliveira",
+          "etapa": "6.6 - (Execução) - Calculo Homologado - Persecução de Bens - Devedor Solvente (Até SISBAJUD, ARISP, E RENAJUD)"
+        }
+      ]
+    },
+    {
+      "responsavel": "Isabella Pozza Gonçalves Martinotti",
+      "total": 7,
+      "composicao": {
+        "Contratação": 6,
+        "Distribuição": 1
+      },
+      "processos": [
+        {
+          "pasta": "6.44780178301701e+16",
+          "cliente": "Rubem Soares de Freitas",
+          "etapa": "1.1 - ( Contratação) Documentos Faltantes"
+        },
+        {
+          "pasta": "6.447801783017011e+16",
+          "cliente": "Marida Cruz Barreto de Castro Souza",
+          "etapa": "1.5 - ( Contratação ) - Aguardando Assinatura de Contrato - Auxilio Captação"
+        },
+        {
+          "pasta": "6.44780178301701e+16",
+          "cliente": "Lawane Mainy Odília de Castro",
+          "etapa": "1.1 - ( Contratação) Documentos Faltantes"
+        },
+        {
+          "pasta": "6.447801783017005e+16",
+          "cliente": "Aelson Gomes Barbosa",
+          "etapa": "1.7 - (Contratação) - Análise de Viabilidade Técnica e Financeira"
+        },
+        {
+          "pasta": "6.447801783017001e+16",
+          "cliente": "Maria das Graças de Oliveira",
+          "etapa": "1.2 - ( Contratação) Informações Incompletas"
+        },
+        {
+          "pasta": "6.447801783016997e+16",
+          "cliente": "Valdirene Pereira Santana",
+          "etapa": "1.2 - ( Contratação) Informações Incompletas"
+        },
+        {
+          "pasta": "6.447801783016855e+16",
+          "cliente": "VINICIUS MORIICHI UEDA VIANA MARQUES",
+          "etapa": "4.2 - Distribuição Suspensa (proc. que precisa aguardar uma data ou autorização do cliente)"
+        }
+      ]
+    },
+    {
+      "responsavel": "Maria Isabella Jaquimenute Ferreira Gomes",
+      "total": 2,
+      "composicao": {
+        "Contratação": 2
+      },
+      "processos": [
+        {
+          "pasta": "6.447801783017007e+16",
+          "cliente": "Sandro Pedro da Silva",
+          "etapa": "1.1 - ( Contratação) Documentos Faltantes"
+        },
+        {
+          "pasta": "6.447801783017009e+16",
+          "cliente": "Jucivaldo Dos Santos Celestino",
+          "etapa": "1.3 - ( Contratação) Organização de Documentos e Informações"
+        }
+      ]
+    },
+    {
+      "responsavel": "Patricia do Carmo Guides Andrade",
+      "total": 3,
+      "composicao": {
+        "Contratação": 3
+      },
+      "processos": [
+        {
+          "pasta": "6.447801783016961e+16",
+          "cliente": "Andressa Karine da Silva",
+          "etapa": "1.8 - ( Contratação ) - Aguardando Assinatura de Contrato"
+        },
+        {
+          "pasta": "6.447801783017004e+16",
+          "cliente": "Nathan Medeiros do Nascimento",
+          "etapa": "1.5 - ( Contratação ) - Aguardando Assinatura de Contrato - Auxilio Captação"
+        },
+        {
+          "pasta": "6.447801783016981e+16",
+          "cliente": "Marcia Lucia Vieira Da Silva",
+          "etapa": "1.5 - ( Contratação ) - Aguardando Assinatura de Contrato - Auxilio Captação"
+        }
+      ]
+    },
+    {
+      "responsavel": "Rafael Izidoro Bello Gonçalves Silva",
+      "total": 2,
+      "composicao": {
+        "Contratação": 2
+      },
+      "processos": [
+        {
+          "pasta": "6.447801783016981e+16",
+          "cliente": "Fábio Marçal Agostinho",
+          "etapa": "1.8 - ( Contratação ) - Aguardando Assinatura de Contrato"
+        },
+        {
+          "pasta": "6.447801783016909e+16",
+          "cliente": "Josenilson dos Santos Lopes",
+          "etapa": "1.8 - ( Contratação ) - Aguardando Assinatura de Contrato"
+        }
+      ]
+    },
+    {
+      "responsavel": "Rosane Ramos Bassan",
+      "total": 3,
+      "composicao": {
+        "Distribuição": 3
+      },
+      "processos": [
+        {
+          "pasta": "6.447801783016834e+16",
+          "cliente": "Aline Fernandes Pimenta de Souza",
+          "etapa": "4.2 - Distribuição Suspensa (proc. que precisa aguardar uma data ou autorização do cliente)"
+        },
+        {
+          "pasta": "6.447801783016858e+16",
+          "cliente": "Geovana Caroline da Silva Marques",
+          "etapa": "4.2 - Distribuição Suspensa (proc. que precisa aguardar uma data ou autorização do cliente)"
+        },
+        {
+          "pasta": "6.447801783016809e+16",
+          "cliente": "Kalebe Ferreira Souza",
+          "etapa": "4.2 - Distribuição Suspensa (proc. que precisa aguardar uma data ou autorização do cliente)"
+        }
+      ]
+    },
+    {
+      "responsavel": "Vinicius Galhardo Giampaulo",
+      "total": 4,
+      "composicao": {
+        "Contratação": 4
+      },
+      "processos": [
+        {
+          "pasta": "6.44780178301701e+16",
+          "cliente": "JOSE MATTHEUS DA SILVA SANTOS",
+          "etapa": "1.8 - ( Contratação ) - Aguardando Assinatura de Contrato"
+        },
+        {
+          "pasta": "6.44780178301701e+16",
+          "cliente": "EDSON BEZERRA DA SILVA JUNIOR",
+          "etapa": "1.8 - ( Contratação ) - Aguardando Assinatura de Contrato"
+        },
+        {
+          "pasta": "6.447801783017007e+16",
+          "cliente": "Breno Dambrosio Queiroz",
+          "etapa": "1.8 - ( Contratação ) - Aguardando Assinatura de Contrato"
+        },
+        {
+          "pasta": "6.447801783016999e+16",
+          "cliente": "Breno Piza Mariano",
+          "etapa": "1.8 - ( Contratação ) - Aguardando Assinatura de Contrato"
+        }
+      ]
+    }
+  ],
+  "tempo_em_aberto": {
+    "mais_120_dias": 164,
+    "entre_60_120": 73,
+    "entre_30_60": 54,
+    "menos_30": 82
+  },
+  "bloqueios": [
+    {
+      "tipo": "Falta doc para distribuição",
+      "total": 21
+    },
+    {
+      "tipo": "Distribuição suspensa",
+      "total": 10
+    }
+  ],
+  "analise_ia": {
+    "resumo_do_dia": "Dados de junho/2026. Há 4 processos já prescritos e 3 com prescrição iminente (até 15 dias). Ana Carolina Santana Pires prescreveu hoje. Gargalo principal nas etapas 2.2 e 2.3 com 141 processos parados.",
+    "alertas_criticos": [
+      {
+        "responsavel": "Matheus Scotti",
+        "problema": "Ana Carolina Santana Pires — prescrição HOJE",
+        "acao_recomendada": "Distribuir imediatamente"
+      },
+      {
+        "responsavel": "Rosane Bassan",
+        "problema": "Kalebe Ferreira Souza — prescrição em 13 dias, distribuição suspensa",
+        "acao_recomendada": "Resolver bloqueio urgente"
+      }
+    ],
+    "acoes_para_bruna_moura": [
+      "23 processos com responsáveis fora da equipe — reatribuir",
+      "4 processos já prescritos — verificar cadastros",
+      "164 processos abertos há mais de 120 dias — priorizar resolução"
+    ],
+    "gerado_em": "2026-06-20T20:00:00-03:00"
+  }
+}
