@@ -1,0 +1,370 @@
+{
+  "atualizado_em": "2026-06-20T23:00:00-03:00",
+  "periodo": {
+    "mes_referencia": "junho/2026",
+    "data_referencia": "2026-06-20",
+    "horario_comercial": false,
+    "proxima_atualizacao": "2026-06-21T08:00:00-03:00"
+  },
+  "funil": {
+    "sdr_registros_brutos": 152,
+    "sdr_clientes_unicos": 130,
+    "sdr_agendou_closer": 47,
+    "contratos_total": 46,
+    "contratos_unidade_voi": 15,
+    "contratos_ccc_externo": 26,
+    "contratos_sem_captador": 5,
+    "pendentes_assinatura": 7,
+    "nao_compareceram": 24
+  },
+  "closers": [
+    {
+      "nome": "Vinicius Galhardo",
+      "total_atendidos": 49,
+      "contratos_fechados": 20,
+      "taxa_fechamento_pct": 41,
+      "nao_compareceu": 13,
+      "nao_quis": 0,
+      "pendentes_assinatura": [
+        {
+          "cliente": "JOSE MATTHEUS DA SILVA SANTOS",
+          "dias_aguardando": 2,
+          "alerta": false
+        },
+        {
+          "cliente": "EDSON BEZERRA DA SILVA JUNIOR",
+          "dias_aguardando": 2,
+          "alerta": false
+        }
+      ],
+      "agendamentos_futuros": [
+        {
+          "cliente": "Geandro Secundino de Souza",
+          "data": "22/06"
+        },
+        {
+          "cliente": "NICOLY VICTORIA ROGANTI",
+          "data": "23/06"
+        }
+      ],
+      "vencidos_sem_conclusao": [
+        {
+          "cliente": "Rubem Soares de Freitas",
+          "data_era": "18/06"
+        },
+        {
+          "cliente": "Emerson Araújo Lopes",
+          "data_era": "02/06"
+        }
+      ]
+    },
+    {
+      "nome": "Patricia Guides",
+      "total_atendidos": 32,
+      "contratos_fechados": 10,
+      "taxa_fechamento_pct": 31,
+      "nao_compareceu": 6,
+      "nao_quis": 0,
+      "pendentes_assinatura": [
+        {
+          "cliente": "Nathan Medeiros do Nascimento",
+          "dias_aguardando": 19,
+          "alerta": true
+        }
+      ],
+      "agendamentos_futuros": [
+        {
+          "cliente": "Adelson Fausto de Araujo",
+          "data": "22/06"
+        },
+        {
+          "cliente": "Ana Lucia de Lima Ribeiro",
+          "data": "22/06"
+        }
+      ],
+      "vencidos_sem_conclusao": [
+        {
+          "cliente": "SIDNEY FERNANDO MATTOS",
+          "data_era": "17/06"
+        },
+        {
+          "cliente": "Aline Terezinha Ruas",
+          "data_era": "18/06"
+        },
+        {
+          "cliente": "GABRIEL FERREIRA CARDOSO",
+          "data_era": "16/06"
+        },
+        {
+          "cliente": "Danilo Rodrigues Magalhães",
+          "data_era": "17/06"
+        }
+      ]
+    },
+    {
+      "nome": "Isabella Pozza",
+      "total_atendidos": 17,
+      "contratos_fechados": 4,
+      "taxa_fechamento_pct": 24,
+      "nao_compareceu": 4,
+      "nao_quis": 0,
+      "pendentes_assinatura": [
+        {
+          "cliente": "Aelson Gomes Barbosa",
+          "dias_aguardando": 18,
+          "alerta": true
+        },
+        {
+          "cliente": "Frangely Fernández Valero",
+          "dias_aguardando": 15,
+          "alerta": true
+        },
+        {
+          "cliente": "Henrique Torres",
+          "dias_aguardando": 12,
+          "alerta": true
+        },
+        {
+          "cliente": "Marida Cruz Barreto",
+          "dias_aguardando": 2,
+          "alerta": false
+        }
+      ],
+      "agendamentos_futuros": [
+        {
+          "cliente": "RUTE NÁLIA ALVES RODRIGUES",
+          "data": "22/06"
+        },
+        {
+          "cliente": "Marielle Cristina Vital",
+          "data": "23/06"
+        }
+      ],
+      "vencidos_sem_conclusao": []
+    }
+  ],
+  "sdrs": [
+    {
+      "nome": "Douglas Giuliano",
+      "registros_brutos": 84,
+      "clientes_unicos": 71,
+      "agendou_closer": 38,
+      "contratos_voi": 2,
+      "contratos_ccc": 6,
+      "total_contratos": 9,
+      "taxa_conversao_pct": 24,
+      "funcao_closer_contratos": 0,
+      "duplicatas_mesmo_dia": [
+        {
+          "cliente": "Wellington dos Santos de Lourdes",
+          "data": "18/06"
+        },
+        {
+          "cliente": "Brenda Prates Carvalho",
+          "data": "18/06"
+        },
+        {
+          "cliente": "Edmilson Borges de Araújo",
+          "data": "18/06"
+        },
+        {
+          "cliente": "Neilson Santos Pereira",
+          "data": "09/06"
+        },
+        {
+          "cliente": "Marcia Maria do Nascimento",
+          "data": "02/06"
+        }
+      ]
+    },
+    {
+      "nome": "Maria Isabella",
+      "registros_brutos": 63,
+      "clientes_unicos": 59,
+      "agendou_closer": 8,
+      "contratos_voi": 5,
+      "contratos_ccc": 2,
+      "total_contratos": 7,
+      "taxa_conversao_pct": 88,
+      "funcao_closer_contratos": 4,
+      "duplicatas_mesmo_dia": []
+    }
+  ],
+  "captacao": {
+    "por_captador": [
+      {
+        "captador": "Unidade VOI (SDR interno)",
+        "total": 15,
+        "tipo": "voi"
+      },
+      {
+        "captador": "Lizandra Bacchiega",
+        "total": 8,
+        "tipo": "externo"
+      },
+      {
+        "captador": "Letícia Martins",
+        "total": 7,
+        "tipo": "externo"
+      },
+      {
+        "captador": "Priscila Damasceno",
+        "total": 5,
+        "tipo": "externo"
+      },
+      {
+        "captador": "Regiane Mantovani",
+        "total": 5,
+        "tipo": "externo"
+      },
+      {
+        "captador": "Maria Isabella Gomes",
+        "total": 1,
+        "tipo": "voi"
+      },
+      {
+        "captador": "Sem captador",
+        "total": 5,
+        "tipo": "sem_captador"
+      }
+    ],
+    "por_origem": [
+      {
+        "origem": "CCC / Campanha Campinas",
+        "total": 23
+      },
+      {
+        "origem": "Google",
+        "total": 8
+      },
+      {
+        "origem": "Indicação cliente VOI",
+        "total": 7
+      },
+      {
+        "origem": "Parcerias",
+        "total": 3
+      },
+      {
+        "origem": "Outros",
+        "total": 2
+      }
+    ],
+    "contratos_por_closer": [
+      {
+        "nome": "Vinicius Galhardo",
+        "total": 20
+      },
+      {
+        "nome": "Patricia Guides",
+        "total": 10
+      },
+      {
+        "nome": "Isabella Pozza",
+        "total": 4
+      },
+      {
+        "nome": "Maria Isabella (SDR+closer)",
+        "total": 4
+      },
+      {
+        "nome": "Outros",
+        "total": 4
+      },
+      {
+        "nome": "Sem responsável",
+        "total": 4
+      }
+    ]
+  },
+  "alertas": {
+    "pendentes_assinatura_acima_5_dias": [
+      {
+        "closer": "Patricia Guides",
+        "cliente": "Nathan Medeiros do Nascimento",
+        "dias": 19
+      },
+      {
+        "closer": "Isabella Pozza",
+        "cliente": "Aelson Gomes Barbosa",
+        "dias": 18
+      },
+      {
+        "closer": "Isabella Pozza",
+        "cliente": "Frangely Fernández Valero",
+        "dias": 15
+      },
+      {
+        "closer": "Isabella Pozza",
+        "cliente": "Henrique Torres",
+        "dias": 12
+      }
+    ],
+    "vencidos_sem_conclusao": [
+      {
+        "closer": "Vinicius Galhardo",
+        "cliente": "Rubem Soares de Freitas",
+        "data_era": "18/06"
+      },
+      {
+        "closer": "Patricia Guides",
+        "cliente": "SIDNEY FERNANDO MATTOS",
+        "data_era": "17/06"
+      },
+      {
+        "closer": "Patricia Guides",
+        "cliente": "Aline Terezinha Ruas",
+        "data_era": "18/06"
+      },
+      {
+        "closer": "Patricia Guides",
+        "cliente": "GABRIEL FERREIRA CARDOSO",
+        "data_era": "16/06"
+      }
+    ],
+    "duplicatas_sdr": [
+      {
+        "sdr": "Douglas",
+        "cliente": "Wellington dos Santos de Lourdes",
+        "data": "18/06"
+      },
+      {
+        "sdr": "Douglas",
+        "cliente": "Brenda Prates Carvalho",
+        "data": "18/06"
+      },
+      {
+        "sdr": "Douglas",
+        "cliente": "Edmilson Borges de Araújo",
+        "data": "18/06"
+      }
+    ],
+    "sem_captador": [
+      {
+        "contrato": "Everton Douglas da Silva Reis",
+        "closer": "Patricia Guides"
+      }
+    ]
+  },
+  "analise_ia": {
+    "resumo_do_mes": "Junho com 46 contratos fechados. CCC representa 50% dos contratos — maior fonte do mês. Vinicius lidera com 41% de conversão. Isabella Pozza tem 4 pendentes de assinatura acima de 5 dias — ação imediata necessária.",
+    "alertas_criticos": [
+      {
+        "responsavel": "Isabella Pozza",
+        "problema": "4 pendentes de assinatura — maior volume da equipe",
+        "acao_recomendada": "Contatar clientes urgentemente"
+      },
+      {
+        "responsavel": "Patricia Guides",
+        "problema": "Nathan Medeiros 19 dias sem assinar",
+        "acao_recomendada": "Contatar hoje"
+      }
+    ],
+    "destaques_positivos": [
+      "Maria Isabella com 88% de taxa de conversão como SDR",
+      "Vinicius lidera com 20 contratos fechados no mês",
+      "CCC Campanha Campinas como maior fonte de contratos"
+    ],
+    "gerado_em": "2026-06-20T23:00:00-03:00"
+  }
+}
