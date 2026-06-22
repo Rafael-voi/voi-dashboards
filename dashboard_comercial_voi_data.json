@@ -1,10 +1,10 @@
 {
-  "atualizado_em": "2026-06-21T15:30:00-03:00",
+  "atualizado_em": "2026-06-22T15:30:00-03:00",
   "periodo": {
     "mes_referencia": "junho/2026",
-    "data_referencia": "2026-06-21",
+    "data_referencia": "2026-06-22",
     "horario_comercial": true,
-    "proxima_atualizacao": "2026-06-21T15:30:00-03:00"
+    "proxima_atualizacao": "2026-06-22T16:00:00-03:00"
   },
   "funil": {
     "sdr_registros_brutos": 0,
@@ -91,6 +91,6 @@
     "resumo_do_mes": "Texto descritivo do desempenho geral do mês.",
     "alertas_criticos": [],
     "destaques_positivos": [],
-    "gerado_em": "2026-06-21T15:30:00-03:00"
+    "gerado_em": "2026-06-22T15:30:00-03:00"
   }
 }
