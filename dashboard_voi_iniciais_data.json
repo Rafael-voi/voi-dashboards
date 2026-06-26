@@ -1,51 +1,198 @@
 {
-  "atualizado_em": "2023-10-01T12:00:00-03:00",
+  "atualizado_em": "2026-06-26T22:23:43.989Z",
   "periodo": {
-    "data_referencia": "2023-10-01",
+    "data_referencia": "2026-06-26",
     "horario_comercial": true,
-    "proxima_atualizacao": "2023-10-02T12:00:00-03:00"
+    "proxima_atualizacao": "2026-06-27T00:00:00.000Z"
   },
   "visao_geral": {
-    "total_processos": 346,
-    "em_contratacao": 0,
-    "em_confeccao": 0,
-    "em_correcao": 0,
-    "em_distribuicao": 0,
+    "total_processos": 349,
+    "em_contratacao": 13,
+    "em_confeccao": 163,
+    "em_correcao": 77,
+    "em_distribuicao": 96,
     "em_tramite": 0,
-    "distribuicao_urgente": 0,
-    "registro_mais_5_anos": 0,
-    "prescricao_critica": 0,
-    "ja_prescrito": 0
+    "distribuicao_urgente": 107,
+    "registro_mais_5_anos": 29,
+    "prescricao_critica": 2,
+    "ja_prescrito": 4
   },
   "prescricoes": {
-    "ja_prescrito": [],
+    "ja_prescrito": [
+      {
+        "cliente": "Camila de Oliveira Correa",
+        "responsavel": "Bruna Moura",
+        "data_demissao": "45323",
+        "dias_restantes": -145,
+        "motivo": "Pediu Demissão",
+        "pasta": "64478017830169819"
+      },
+      {
+        "cliente": "CAIRO RODRIGO MARTINS FERRES",
+        "responsavel": "Bruna Moura",
+        "data_demissao": "45233",
+        "dias_restantes": -235,
+        "motivo": "Sem Justa Causa",
+        "pasta": "64478017830169945"
+      },
+      {
+        "cliente": "Daiane Jacqueline da Silva",
+        "responsavel": "Bruna Moura",
+        "data_demissao": "45337",
+        "dias_restantes": -131,
+        "motivo": "Sem Justa Causa",
+        "pasta": "64478017830170060"
+      },
+      {
+        "cliente": "Osvaldo Porfírio da Silva",
+        "responsavel": "Amanda Faria",
+        "data_demissao": "43468",
+        "dias_restantes": -2000,
+        "motivo": "Funcionario sem registro parou de trabalhar",
+        "pasta": "64478017830170069"
+      }
+    ],
     "critico_0_15": [],
-    "urgente_16_30": []
+    "urgente_16_30": [
+      {
+        "cliente": "Pedro Paulo Paz da Silva",
+        "responsavel": "Bruna Moura",
+        "data_demissao": "45487",
+        "dias_restantes": 18,
+        "motivo": "Sem Justa Causa",
+        "pasta": "64478017830169848"
+      }
+    ]
   },
   "funil": {
     "por_tipo_fase": [
       {
-        "tipo_fase": "Confecção",
-        "quantidade": 346
+        "tipo_fase": "Confecção de Inicial",
+        "quantidade": 163
+      },
+      {
+        "tipo_fase": "Distribuição",
+        "quantidade": 96
+      },
+      {
+        "tipo_fase": "Correção de Inicial",
+        "quantidade": 77
+      },
+      {
+        "tipo_fase": "Contratação ( Reunião de Documentos e Assinatura Contrato)",
+        "quantidade": 13
       }
     ],
-    "por_etapa_fase": []
+    "por_etapa_fase": [
+      {
+        "etapa": "2.4 - Inicial em andamento",
+        "quantidade": 24
+      },
+      {
+        "etapa": "4.0 - Aguardando Distribuição da Inicial",
+        "quantidade": 76
+      },
+      {
+        "etapa": "3.7 - Inicial revisada sem apontamentos - Só distribuir",
+        "quantidade": 6
+      },
+      {
+        "etapa": "4.2 - Distribuição Suspensa (proc. que precisa aguardar uma data ou autorização do cliente)",
+        "quantidade": 10
+      },
+      {
+        "etapa": "3.4 - Inicial revisada com Apontamentos - Apos Distribuir",
+        "quantidade": 27
+      },
+      {
+        "etapa": "3.5 - Inicial revisada com Apontamentos - Devolver para 2º Correção",
+        "quantidade": 2
+      },
+      {
+        "etapa": "3.1 - 1ª Correção de Inicial",
+        "quantidade": 43
+      },
+      {
+        "etapa": "2.2 - Aguardando Cadastro de pedidos (pedidos via IA + pedidos CCT)",
+        "quantidade": 61
+      },
+      {
+        "etapa": "2.3 - Aguardando Geração da Inicial (Automatizada)",
+        "quantidade": 44
+      },
+      {
+        "etapa": "4.1 - Aguardando documentos para Distribuição da Inicial",
+        "quantidade": 9
+      },
+      {
+        "etapa": "1.8 - ( Contratação ) - Aguardando Assinatura de Contrato",
+        "quantidade": 7
+      },
+      {
+        "etapa": "1.3 - ( Contratação) Organização de Documentos e Informações",
+        "quantidade": 1
+      },
+      {
+        "etapa": "2.1 - Fase de Checklist - Análise da Fase",
+        "quantidade": 34
+      },
+      {
+        "etapa": "1.5 - ( Contratação ) - Aguardando Assinatura de Contrato - Auxilio Captação",
+        "quantidade": 1
+      },
+      {
+        "etapa": "1.1 - ( Contratação) Documentos Faltantes",
+        "quantidade": 2
+      },
+      {
+        "etapa": "1.2 - ( Contratação) Informações Incompletas",
+        "quantidade": 2
+      }
+    ]
   },
   "responsaveis": [
-    "Matheus Scotti",
-    "Bruna Moura",
-    "Amanda Faria",
-    "Maria Beatriz",
-    "Gislaine Cristina",
-    "Laura Guimarães",
-    "Gabriela Martinez"
+    {
+      "nome": "Bruna Moura",
+      "total": 76
+    },
+    {
+      "nome": "Gislaine Cristina",
+      "total": 39
+    },
+    {
+      "nome": "Matheus Scotti",
+      "total": 71
+    },
+    {
+      "nome": "Amanda Faria",
+      "total": 41
+    },
+    {
+      "nome": "Gabriela Martinez",
+      "total": 25
+    },
+    {
+      "nome": "Maria Beatriz",
+      "total": 48
+    },
+    {
+      "nome": "Laura Guimarães",
+      "total": 32
+    }
   ],
-  "fora_da_equipe": [],
+  "fora_da_equipe": [
+    "Rosane Bassan",
+    "Isabella Martinotti",
+    "Claudia Pompeu",
+    "Rafael Silva",
+    "Patricia Andrade",
+    "Vinicius Giampaulo"
+  ],
   "tempo_em_aberto": {
-    "mais_120_dias": 0,
-    "entre_60_120": 0,
-    "entre_30_60": 0,
-    "menos_30": 0
+    "mais_120_dias": 139,
+    "entre_60_120": 56,
+    "entre_30_60": 59,
+    "menos_30": 95
   },
   "bloqueios": [],
   "analise_ia": {
@@ -54,5 +201,5 @@
     "destaques_operacionais": [],
     "gargalos_identificados": []
   },
-  "gerado_em": "2023-10-01T12:00:00-03:00"
+  "gerado_em": "2026-06-26T22:23:43.989Z"
 }
