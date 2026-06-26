@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-06-26T22:34:57.673Z",
+  "atualizado_em": "2026-06-26T22:51:58.549Z",
   "periodo": {
     "data_referencia": "2026-06-26",
     "horario_comercial": true,
@@ -8,8 +8,8 @@
   "visao_geral": {
     "total_processos": 349,
     "em_contratacao": 13,
-    "em_confeccao": 163,
-    "em_correcao": 77,
+    "em_confeccao": 162,
+    "em_correcao": 78,
     "em_distribuicao": 96,
     "em_tramite": 0,
     "distribuicao_urgente": 107,
@@ -52,7 +52,24 @@
         "pasta": "64478017830170069"
       }
     ],
-    "critico_0_15": [],
+    "critico_0_15": [
+      {
+        "cliente": "Kalebe Ferreira Souza",
+        "responsavel": "Rosane Bassan",
+        "etapa": "4.0 - Aguardando Distribuição da Inicial",
+        "dias": 7,
+        "motivo": "Pediu Demissão",
+        "pasta": "64478017830168087"
+      },
+      {
+        "cliente": "Gabriel Adriano Estrela Nunes",
+        "responsavel": "Laura Guimarães",
+        "etapa": "4.0 - Aguardando Distribuição da Inicial",
+        "dias": 8,
+        "motivo": "Acordo Consensual - Art.484-A da CLT",
+        "pasta": "64478017830169283"
+      }
+    ],
     "urgente_16_30": [
       {
         "cliente": "Pedro Paulo Paz da Silva",
@@ -68,7 +85,7 @@
     "por_tipo_fase": [
       {
         "tipo": "Confecção",
-        "total": 163
+        "total": 162
       },
       {
         "tipo": "Distribuição",
@@ -76,7 +93,7 @@
       },
       {
         "tipo": "Correção",
-        "total": 77
+        "total": 78
       },
       {
         "tipo": "Contratação",
@@ -110,11 +127,11 @@
       },
       {
         "etapa": "3.1 - 1ª Correção de Inicial",
-        "total": 43
+        "total": 44
       },
       {
         "etapa": "2.2 - Aguardando Cadastro de pedidos (pedidos via IA + pedidos CCT)",
-        "total": 61
+        "total": 60
       },
       {
         "etapa": "2.3 - Aguardando Geração da Inicial (Automatizada)",
@@ -162,18 +179,18 @@
     },
     {
       "nome": "Bruna Moura",
-      "total": 76,
+      "total": 77,
       "composicao": {
-        "Confecção": 62,
+        "Confecção": 63,
         "Correção": 10,
         "Distribuição": 4
       }
     },
     {
       "nome": "Amanda Faria",
-      "total": 41,
+      "total": 40,
       "composicao": {
-        "Confecção": 37,
+        "Confecção": 36,
         "Distribuição": 3,
         "Correção": 1
       }
@@ -182,8 +199,8 @@
       "nome": "Maria Beatriz",
       "total": 48,
       "composicao": {
-        "Confecção": 30,
-        "Correção": 17,
+        "Confecção": 29,
+        "Correção": 18,
         "Distribuição": 1
       }
     },
@@ -270,5 +287,5 @@
     "destaques_operacionais": [],
     "gargalos_identificados": []
   },
-  "gerado_em": "2026-06-26T22:34:57.673Z"
+  "gerado_em": "2026-06-26T22:51:58.549Z"
 }
