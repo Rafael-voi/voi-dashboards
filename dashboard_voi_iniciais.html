@@ -214,10 +214,10 @@ function renderizarDashboard(d) {
     <div class="card">
       <div class="ct">Etapas do funil</div>
       ${f.por_etapa_fase.map(x => {
-        const w = Math.max(28, Math.round(x.total / maxEtapa * 200));
+        const w = Math.max(5, Math.round(x.total / maxEtapa * 100));
         const cores = ['#2E7D32','#388E3C','#E65100','#8B1A3A','#9C2040','#1565C0','#1976D2','#B71C1C','#C62828','#F57F17'];
         const idx = f.por_etapa_fase.indexOf(x);
-        return `<div class="funil-row"><div class="funil-lbl" title="${x.etapa}">${x.etapa}</div><div class="funil-bar" style="background:${cores[idx%cores.length]};width:${w}px"><span>${x.total}</span></div></div>`;
+        return `<div class="funil-row"><div class="funil-lbl" title="${x.etapa}">${x.etapa}</div><div class="funil-bar" style="background:${cores[idx%cores.length]};width:${w}%"><span>${x.total}</span></div></div>`;
       }).join('')}
     </div>
     <div class="card">
