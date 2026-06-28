@@ -155,7 +155,7 @@ function renderizarDashboard(d) {
   const b = d.bloqueios || [];
   const ai = d.analise_ia;
 
-  const maxEtapa = f.por_etapa_fase.length > 0 ? f.por_etapa_fase[0].total : 1;
+  const maxEtapa = f.por_etapa_fase.length > 0 ? Math.max(...f.por_etapa_fase.map(x => x.total)) : 1;
 
   // Destruir gráficos antigos
   if (chart1) chart1.destroy();
@@ -302,7 +302,7 @@ function renderizarDashboard(d) {
       labels: f.por_tipo_fase.map(x => x.tipo),
       datasets: [{
         data: f.por_tipo_fase.map(x => x.total),
-        backgroundColor: f.por_tipo_fase.map(x => CORES_FASE[x.tipo] || '#888'),
+        backgroundColor: f.por_tipo_fase.map(x => CORES_FASE[x.tipo] || CORES_FASE[Object.keys(CORES_FASE).find(k => x.tipo && x.tipo.includes(k))] || '#888'),
         borderWidth: 2, borderColor: '#fff'
       }]
     },
