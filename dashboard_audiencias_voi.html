@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Audiências e Perícias — VOI Advogados</title>
+<style>
+:root{--bordo:#9B1B3A;--bordo-esc:#7a152d;--preto:#2D2D2D;--branco:#fff;--cinza:#6b6b6b;--cinza-cl:#f4f4f5;--linha:#e5e5e7;
+--alerta:#E8720C;--alerta-bg:#FFF3E8;--atencao:#C9A227;--atencao-bg:#FBF6E3;--ok:#1F7A4D;--ok-bg:#E9F5EE;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#fafafa;color:var(--preto);line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+header{background:var(--bordo);color:#fff;padding:22px 0}
+header .wrap{display:flex;align-items:center;justify-content:space-between;padding-bottom:0;flex-wrap:wrap;gap:12px}
+.brand{display:flex;align-items:center;gap:14px}
+/* LOGO oficial VOI (horizontal, escuro): vai numa pílula branca porque o símbolo bordô somiria no banner bordô. Arquivo no root do repo. Se renomear para logo-voi.jpg, trocar o src abaixo. */
+.logo{height:54px;padding:9px 18px;border-radius:11px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo img{height:100%;width:auto;display:block;object-fit:contain}
+header h1{font-size:19px;font-weight:700;letter-spacing:-.3px}
+header .sub{font-size:12.5px;opacity:.85;font-weight:400}
+.meta{font-size:12.5px;opacity:.9;text-align:right}
+nav.tabs{background:var(--preto);position:sticky;top:0;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+nav.tabs .wrap{display:flex;gap:2px;padding:0 20px;overflow-x:auto}
+nav.tabs button{background:none;border:none;color:#cfcfcf;padding:14px 18px;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:.15s;font-family:inherit}
+nav.tabs button:hover{color:#fff}
+nav.tabs button.active{color:#fff;border-bottom-color:var(--bordo)}
+nav.tabs .badge{display:inline-block;min-width:18px;height:18px;line-height:18px;background:var(--alerta);color:#fff;border-radius:9px;font-size:11px;font-weight:700;padding:0 5px;margin-left:6px;vertical-align:middle}
+.panel{display:none;padding-top:28px}
+.panel.active{display:block;animation:fade .2s}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--cinza);margin:32px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--linha)}
+.section-title:first-child{margin-top:0}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.kpi{background:#fff;border:1px solid var(--linha);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--bordo)}
+.kpi.warn::before{background:var(--alerta)}.kpi.good::before{background:var(--ok)}
+.kpi .num{font-size:30px;font-weight:800;letter-spacing:-1px;line-height:1}
+.kpi .lbl{font-size:12.5px;color:var(--cinza);margin-top:6px;font-weight:600}
+.kpi .hint{font-size:11px;color:#9a9a9a;margin-top:3px}
+.cards-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:820px){.cards-2{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--linha);border-radius:12px;padding:22px}
+.card h3{font-size:15px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:11px}
+.bar-row .name{width:150px;font-size:13px;font-weight:600;flex-shrink:0;text-align:right}
+.bar-row .track{flex:1;background:var(--cinza-cl);border-radius:6px;height:26px;position:relative;overflow:hidden}
+.bar-row .fill{height:100%;background:var(--bordo);border-radius:6px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;color:#fff;font-size:12px;font-weight:700;min-width:28px;transition:width .4s}
+.bar-row .fill.alt{background:var(--preto)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--cinza);padding:10px 12px;border-bottom:2px solid var(--linha);font-weight:700}
+td{padding:10px 12px;border-bottom:1px solid var(--linha)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:700}
+.tag.interno{background:#eef1f8;color:#2d3d6b}.tag.corresp{background:#f0ece4;color:#6b5a2d}.tag.assist{background:#e8f0ee;color:#1F7A4D}
+.alert-block{border-radius:12px;padding:20px 22px;margin-bottom:18px;border:1px solid}
+.alert-block.red{background:var(--alerta-bg);border-color:#f3c99e}
+.alert-block.yellow{background:var(--atencao-bg);border-color:#e8d99a}
+.alert-block.green{background:var(--ok-bg);border-color:#a9d7bd}
+.alert-head{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800;margin-bottom:4px}
+.alert-head .ico{font-size:20px}
+.red .alert-head{color:#9c4a06}.yellow .alert-head{color:#8a6d0f}.green .alert-head{color:#155c39}
+.alert-desc{font-size:13px;color:#555;margin-bottom:14px}
+.alert-count{font-size:13px;font-weight:800;padding:2px 10px;border-radius:20px;color:#fff}
+.red .alert-count{background:var(--alerta)}.yellow .alert-count{background:var(--atencao)}.green .alert-count{background:var(--ok)}
+.empty{color:#8a8a8a;font-size:13px;font-style:italic;padding:6px 0}
+.ia-box{background:linear-gradient(135deg,#fff,#faf6f7);border:1.5px solid var(--bordo);border-radius:14px;padding:26px}
+.ia-box h3{color:var(--bordo);font-size:17px;margin-bottom:6px;display:flex;align-items:center;gap:9px}
+.ia-sub{font-size:12.5px;color:var(--cinza);margin-bottom:20px}
+.ia-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--linha)}
+.ia-item:last-child{border-bottom:none}
+.ia-item .rank{width:30px;height:30px;border-radius:8px;background:var(--bordo);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.ia-item.p2 .rank{background:var(--alerta)}
+.ia-item .txt{flex:1}
+.ia-item .txt strong{display:block;font-size:14px;margin-bottom:3px}
+.ia-item .txt .desc{font-size:13px;color:#555}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{background:#fff;border:1px solid var(--linha);border-radius:7px;padding:5px 10px;font-size:12px;font-weight:600;color:var(--preto);display:flex;align-items:center;gap:6px}
+.chip .d{font-size:10.5px;color:var(--alerta);font-weight:700;background:var(--alerta-bg);padding:1px 5px;border-radius:4px}
+.chip.mini{font-size:11.5px;padding:4px 9px}
+.pill-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.pill{background:#fff;border:1px solid var(--linha);border-radius:20px;padding:8px 16px;font-size:13px;font-weight:600}
+.pill b{color:var(--bordo)}
+.note{font-size:12px;color:#8a8a8a;margin-top:10px;padding:10px 14px;background:#f7f7f8;border-radius:8px;border-left:3px solid var(--cinza)}
+.heat td{text-align:center;font-weight:700;font-size:13px;border:1px solid var(--linha)}
+.heat td.name{text-align:right;font-weight:600;background:#fafafa;white-space:nowrap}
+.heat th{text-align:center}
+.foot{text-align:center;font-size:11.5px;color:#a5a5a5;margin-top:40px;padding-top:20px;border-top:1px solid var(--linha)}
+</style></head><body>
+<header><div class="wrap">
+<div class="brand"><div class="logo"><img src="Logo%20VOI%20Advogados_Prancheta%201.jpg" alt="VOI Advogados"></div>
+<div><h1>Dashboard de Audiências e Perícias</h1><div class="sub">Direção de Operações Jurídicas — Rafael Bacchiega</div></div></div>
+<div class="meta">Ano 2026 · Atualizado em <b id="dtAtual"></b><br><span style="opacity:.7">Uso interno · dados sensíveis não publicados</span></div>
+</div></header>
+<nav class="tabs"><div class="wrap" id="tabbar"></div></nav>
+<div class="wrap">
+<div class="panel active" id="p-acoes"></div>
+<div class="panel" id="p-visao"></div>
+<div class="panel" id="p-futuras"></div>
+<div class="panel" id="p-notif"></div>
+<div class="panel" id="p-advogados"></div>
+<div class="foot">VOI Advogados · Dashboard gerado automaticamente · Recalculado a cada atualização do relatório Datajuri</div>
+</div>
+<script>
+const D = {"atualizado": "04/07/2026", "kpis": {"total": 2906, "concluidas": 1799, "canceladas": 327, "futuras": 780, "virtuais": 1309, "presenciais": 1092, "hibridas": 16, "correspondente": 375, "sem_nomeado_ano": 1471, "desaparecidos_ano": 26, "media_interna": 51.0}, "tipos": {"Perícia": 423, "Julgamento": 440, "Audiência": 1999, "Encerramento": 32, "Não especificado": 11, "Ignorar": 1}, "fases": {"Inicial": 655, "Una": 483, "Instrução": 746, "Conciliação": 51, "Conciliação Execução": 59, "Ratificação Acordo": 4}, "natureza": {"PREVIDENCIÁRIO": 42, "TRABALHISTA": 2847, "CÍVEL": 14, "REPRESENTAÇÃO OAB": 1}, "modalidade": {"Presencial": 1092, "Virtual": 1309, "Híbrida": 16}, "mensal": {"2026-01": 128, "2026-02": 297, "2026-03": 417, "2026-04": 344, "2026-05": 374, "2026-06": 407, "2026-07": 311, "2026-08": 212, "2026-09": 170, "2026-10": 117, "2026-11": 85, "2026-12": 44}, "producao": [{"nome": "Audiências e Pericias", "total": 1471, "cat": "Sem nomeado"}, {"nome": "Correspondente e Prazos", "total": 375, "cat": "Correspondente"}, {"nome": "Juliana Rodrigues de Paula", "total": 212, "cat": "Interno"}, {"nome": "Tamyres Rodrigues Cassimiro Cirqueira", "total": 212, "cat": "Interno"}, {"nome": "Camila Alves do Amaral Pereira", "total": 196, "cat": "Interno"}, {"nome": "Luiz Felipe de Souza Siqueira", "total": 194, "cat": "Interno"}, {"nome": "RICARDO GONÇALVES SILVA - EQUIPE VOI", "total": 76, "cat": "Interno"}, {"nome": "Artur Izidoro CC", "total": 41, "cat": "Assistente"}, {"nome": "Veronica Lenart", "total": 38, "cat": "Interno"}, {"nome": "Oswaldo Antonio Vismar", "total": 33, "cat": "Interno"}, {"nome": "Rafael Bacchiega", "total": 12, "cat": "Interno"}, {"nome": "Bárbara Cristina de Oliveira", "total": 10, "cat": "Interno"}, {"nome": "Patricia do Carmo Guides Andrade", "total": 9, "cat": "Interno"}, {"nome": "Gabriela Natacha de Oliveira Martinez", "total": 8, "cat": "Interno"}, {"nome": "Vinicius Giampaulo André", "total": 7, "cat": "Interno"}, {"nome": "Vania Cristina Magrini", "total": 4, "cat": "Interno"}, {"nome": "Rafael Izidoro Bello Gonçalves Silva", "total": 2, "cat": "Interno"}, {"nome": "Jose Alexandre Crescenzio - VOI Advogados", "total": 1, "cat": "Interno"}, {"nome": "Rafael Oliveira dos Santos", "total": 1, "cat": "Interno"}, {"nome": "Laura Guimarães Felgar", "total": 1, "cat": "Interno"}, {"nome": "Jaqueline Seleber Pizarro", "total": 1, "cat": "Interno"}, {"nome": "Daniela Fiorini Santos", "total": 1, "cat": "Interno"}, {"nome": "Claudia Bearzotti Pompeu", "total": 1, "cat": "Interno"}], "heatmap": {"fases": ["Inicial", "Instrução", "Una", "Conciliação", "Conciliação Execução"], "advs": [{"nome": "Juliana Rodrigues de Paula", "vals": [66, 95, 44, 1, 2], "total": 212}, {"nome": "Tamyres Rodrigues Cassimiro Cirqueira", "vals": [74, 77, 55, 3, 0], "total": 212}, {"nome": "Camila Alves do Amaral Pereira", "vals": [94, 53, 43, 5, 0], "total": 196}, {"nome": "Luiz Felipe de Souza Siqueira", "vals": [59, 74, 32, 3, 0], "total": 194}, {"nome": "RICARDO GONÇALVES SILVA - EQUIPE VOI", "vals": [20, 1, 2, 14, 31], "total": 76}, {"nome": "Veronica Lenart", "vals": [27, 4, 5, 1, 0], "total": 38}, {"nome": "Oswaldo Antonio Vismar", "vals": [0, 0, 0, 17, 16], "total": 33}, {"nome": "Rafael Bacchiega", "vals": [2, 2, 2, 1, 1], "total": 12}, {"nome": "Bárbara Cristina de Oliveira", "vals": [0, 0, 0, 0, 0], "total": 10}, {"nome": "Patricia do Carmo Guides Andrade", "vals": [7, 0, 0, 0, 0], "total": 9}, {"nome": "Gabriela Natacha de Oliveira Martinez", "vals": [7, 0, 0, 0, 0], "total": 8}, {"nome": "Vinicius Giampaulo André", "vals": [1, 0, 0, 0, 0], "total": 7}, {"nome": "Vania Cristina Magrini", "vals": [1, 2, 0, 0, 0], "total": 4}, {"nome": "Rafael Izidoro Bello Gonçalves Silva", "vals": [0, 1, 0, 0, 1], "total": 2}, {"nome": "Jose Alexandre Crescenzio - VOI Advogados", "vals": [0, 0, 0, 0, 0], "total": 1}, {"nome": "Rafael Oliveira dos Santos", "vals": [0, 0, 0, 0, 0], "total": 1}, {"nome": "Laura Guimarães Felgar", "vals": [1, 0, 0, 0, 0], "total": 1}, {"nome": "Jaqueline Seleber Pizarro", "vals": [1, 0, 0, 0, 0], "total": 1}, {"nome": "Daniela Fiorini Santos", "vals": [1, 0, 0, 0, 0], "total": 1}, {"nome": "Claudia Bearzotti Pompeu", "vals": [1, 0, 0, 0, 0], "total": 1}]}, "mensal_adv": {"meses": ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07"], "advs": [{"nome": "Tamyres Rodrigues Cassimiro Cirqueira", "vals": [15, 32, 41, 30, 36, 41, 17], "total": 212}, {"nome": "Juliana Rodrigues de Paula", "vals": [16, 31, 45, 29, 32, 41, 17], "total": 211}, {"nome": "Camila Alves do Amaral Pereira", "vals": [0, 33, 45, 30, 38, 33, 16], "total": 195}, {"nome": "Luiz Felipe de Souza Siqueira", "vals": [17, 27, 42, 26, 32, 36, 14], "total": 194}, {"nome": "RICARDO GONÇALVES SILVA - EQUIPE VOI", "vals": [9, 5, 21, 9, 8, 11, 13], "total": 76}, {"nome": "Veronica Lenart", "vals": [1, 5, 6, 8, 9, 8, 1], "total": 38}, {"nome": "Oswaldo Antonio Vismar", "vals": [1, 10, 3, 11, 7, 1, 0], "total": 33}, {"nome": "Rafael Bacchiega", "vals": [4, 3, 4, 1, 0, 0, 0], "total": 12}, {"nome": "Bárbara Cristina de Oliveira", "vals": [0, 3, 3, 0, 1, 1, 2], "total": 10}, {"nome": "Patricia do Carmo Guides Andrade", "vals": [0, 0, 0, 0, 1, 5, 3], "total": 9}, {"nome": "Gabriela Natacha de Oliveira Martinez", "vals": [0, 1, 2, 0, 0, 0, 5], "total": 8}, {"nome": "Vinicius Giampaulo André", "vals": [0, 0, 0, 1, 1, 5, 0], "total": 7}, {"nome": "Vania Cristina Magrini", "vals": [0, 0, 1, 1, 0, 0, 2], "total": 4}, {"nome": "Rafael Izidoro Bello Gonçalves Silva", "vals": [0, 1, 0, 0, 0, 1, 0], "total": 2}, {"nome": "Jose Alexandre Crescenzio - VOI Advogados", "vals": [0, 1, 0, 0, 0, 0, 0], "total": 1}, {"nome": "Rafael Oliveira dos Santos", "vals": [0, 0, 1, 0, 0, 0, 0], "total": 1}, {"nome": "Laura Guimarães Felgar", "vals": [0, 0, 0, 0, 1, 0, 0], "total": 1}, {"nome": "Jaqueline Seleber Pizarro", "vals": [0, 0, 0, 0, 1, 0, 0], "total": 1}, {"nome": "Daniela Fiorini Santos", "vals": [0, 0, 0, 0, 0, 1, 0], "total": 1}, {"nome": "Claudia Bearzotti Pompeu", "vals": [0, 0, 0, 0, 0, 1, 0], "total": 1}]}, "alertas": {"nomeacao": [], "encerramento": [], "canceladas": [{"data": "06/07/2026", "dias": 2, "cliente": "WÉLICA BARBOSA ARAUJO", "processo": "64478017830166817", "assunto": "Aud/ORD INICIAL - Virtual", "responsavel": "Audiências e Pericias", "notif": "Notificado do Cancelamento", "modal": "Virtual", "tipo": "Audiência"}, {"data": "06/07/2026", "dias": 2, "cliente": "Karla Dayane Venceslau da Costa", "processo": "64478017830168464", "assunto": "Aud/ORD - UNA - Presencial", "responsavel": "Audiências e Pericias", "notif": "Notificado do Cancelamento", "modal": "Presencial", "tipo": "Audiência"}, {"data": "06/07/2026", "dias": 2, "cliente": "WESLEY MIRANDA NASCIMENTO", "processo": "64478017830169805", "assunto": "Aud/ORD INICIAL - Virtual", "responsavel": "Audiências e Pericias", "notif": "Notificado do Cancelamento", "modal": "Virtual", "tipo": "Audiência"}, {"data": "07/07/2026", "dias": 3, "cliente": "Simone Cristina de Oliveira", "processo": "64478017830168576", "assunto": "Aud/ORD UNA - Virtual", "responsavel": "Audiências e Pericias", "notif": "Notificado do Cancelamento", "modal": "Virtual", "tipo": "Audiência"}, {"data": "07/07/2026", "dias": 3, "cliente": "FABIANO RIBEIRO DOS SANTOS", "processo": "64478017830167366", "assunto": "Aud/ORD UNA - Virtual", "responsavel": "Audiências e Pericias", "notif": "Notificado do Cancelamento", "modal": "Virtual", "tipo": "Audiência"}, {"data": "08/07/2026", "dias": 4, "cliente": "Marcela Pereira da Silva", "processo": "64478017830168456", "assunto": "Aud/ORD - Instrução - Presencial", "responsavel": "Correspondente e Prazos", "notif": "Notificado do Cancelamento", "modal": "Presencial", "tipo": "Audiência"}, {"data": "08/07/2026", "dias": 4, "cliente": "Paulo Ricardo Garcia Rocha", "processo": "64478017830167636", "assunto": "Aud/ORD Instrução - Virtual", "responsavel": "Audiências e Pericias", "notif": "Notificado do Cancelamento", "modal": "Virtual", "tipo": "Audiência"}], "canceladas_sem_notif": [], "nao_notificado": [{"data": "08/07/2026", "dias": 4, "cliente": "Giovana Almagro de Oliveira", "processo": "64478017830168307", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Correspondente e Prazos", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Perícia"}, {"data": "10/07/2026", "dias": 6, "cliente": "Fernando Alves queroz", "processo": "64478017830169506", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Correspondente e Prazos", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Perícia"}], "nao_confirmado": [{"data": "06/07/2026", "dias": 2, "cliente": "EMANOELLY VICTORIA SOUSA GONÇALVES", "processo": "64478017830169948", "assunto": "Aud/ORD - INICIAL - Presencial", "responsavel": "Correspondente e Prazos", "notif": "Foi Notificado", "modal": "Presencial", "tipo": "Audiência"}, {"data": "07/07/2026", "dias": 3, "cliente": "Poliana Alves do Nascimento", "processo": "64478017830168955", "assunto": "Aud/ORD - Instrução - Presencial", "responsavel": "Correspondente e Prazos", "notif": "Foi Notificado", "modal": "Presencial", "tipo": "Audiência"}, {"data": "08/07/2026", "dias": 4, "cliente": "Yasmin de Souza Dorneles", "processo": "64478017830167510", "assunto": "Aud/ORD - CONCILIAÇÃO EM CONHECIMENTO - VIRTUAL", "responsavel": "Tamyres Rodrigues Cassimiro Cirqueira", "notif": "Enviado E-mail", "modal": "Virtual", "tipo": "Audiência"}, {"data": "08/07/2026", "dias": 4, "cliente": "Kelly Nunes Souza", "processo": "64478017830167513", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Correspondente e Prazos", "notif": "Foi Notificado", "modal": "Presencial", "tipo": "Perícia"}, {"data": "08/07/2026", "dias": 4, "cliente": "Juliana Aparecida Lemes Buono", "processo": "64478017830164637", "assunto": "Aud/ORD INICIAL - Virtual", "responsavel": "Juliana Rodrigues de Paula", "notif": "Enviado E-mail", "modal": "Virtual", "tipo": "Audiência"}], "desaparecidos": [], "generico_futuro": [{"data": "16/07/2026", "dias": 12, "cliente": "HIPOLITO FAGNER SOARES SILVA", "processo": "64478017830169773", "assunto": "Audiência", "responsavel": "Bárbara Cristina de Oliveira", "notif": "", "modal": "—", "tipo": "Não especificado"}, {"data": "22/07/2026", "dias": 18, "cliente": "Nathália Fernandes de Souza", "processo": "64478017830169665", "assunto": "Audiência", "responsavel": "Bárbara Cristina de Oliveira", "notif": "Foi Notificado", "modal": "—", "tipo": "Não especificado"}], "generico_passado_qtd": 9, "atividade": [{"data": "28/01/2026", "dias": -157, "cliente": "Silvio Pessoa Belo", "processo": "64478017830167911", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Correspondente e Prazos", "notif": "Foi Notificado e Confirmou", "modal": "Presencial", "tipo": "Perícia"}, {"data": "28/01/2026", "dias": -157, "cliente": "BARBARA DA SILVA SANTOS", "processo": "64478017830167981", "assunto": "Aud/ORD INICIAL - Virtual", "responsavel": "Tamyres Rodrigues Cassimiro Cirqueira", "notif": "Foi Notificado e Confirmou", "modal": "Virtual", "tipo": "Audiência"}, {"data": "28/01/2026", "dias": -157, "cliente": "Luana Vasconcelos Santos", "processo": "64478017830168640", "assunto": "Aud/ORD INICIAL - Virtual", "responsavel": "Juliana Rodrigues de Paula", "notif": "Foi Notificado e Confirmou", "modal": "Virtual", "tipo": "Audiência"}, {"data": "28/01/2026", "dias": -157, "cliente": "PATRICK D ANGELIS SIMOES", "processo": "64478017830168710", "assunto": "Aud/ORD INICIAL - Virtual", "responsavel": "Luiz Felipe de Souza Siqueira", "notif": "Foi Notificado e Confirmou", "modal": "Virtual", "tipo": "Audiência"}, {"data": "27/02/2026", "dias": -127, "cliente": "JOSEANE SILVA SANTOS", "processo": "64478017830167469", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Correspondente e Prazos", "notif": "Foi Notificado e Confirmou", "modal": "Presencial", "tipo": "Perícia"}, {"data": "04/03/2026", "dias": -122, "cliente": "V.O.I - VISMAR, OLIVEIRA E IZIDORO ADVOGADOS", "processo": "64478017830168333", "assunto": "Audiência", "responsavel": "Rafael Oliveira dos Santos", "notif": "", "modal": "—", "tipo": "Não especificado"}], "desconhecido": []}, "notificacao": {"urgentissimo": [{"data": "08/07/2026", "dias": 4, "cliente": "Giovana Almagro de Oliveira", "processo": "64478017830168307", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Correspondente e Prazos", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Perícia"}, {"data": "10/07/2026", "dias": 6, "cliente": "Fernando Alves queroz", "processo": "64478017830169506", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Correspondente e Prazos", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Perícia"}], "urgente": [{"data": "15/07/2026", "dias": 11, "cliente": "Jackson Douglas Ferreira", "processo": "64478017830164027", "assunto": "Aud/ORD - Instrução - Presencial", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Audiência"}, {"data": "16/07/2026", "dias": 12, "cliente": "IGOR RAFAEL DE MELO", "processo": "64478017830168020", "assunto": "Aud/ORD INICIAL - Virtual", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Virtual", "tipo": "Audiência"}, {"data": "21/07/2026", "dias": 17, "cliente": "Luis Felipe Moreira dos Santos", "processo": "64478017830166582", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Perícia"}, {"data": "23/07/2026", "dias": 19, "cliente": "Renan Guilherme Galdino Simplicio", "processo": "64478017830168679", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Perícia"}, {"data": "28/07/2026", "dias": 24, "cliente": "Paulo Franco de Oliveira", "processo": "64478017830169252", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Perícia"}, {"data": "28/07/2026", "dias": 24, "cliente": "Ricardo Nascimento Alves", "processo": "64478017830168523", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Perícia"}, {"data": "29/07/2026", "dias": 25, "cliente": "MARIA JOSE DE OLIVEIRA MENDES DE SOUZA", "processo": "64478017830169356", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Perícia"}, {"data": "29/07/2026", "dias": 25, "cliente": "Viviane Pereira Santos", "processo": "64478017830169368", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Perícia"}, {"data": "29/07/2026", "dias": 25, "cliente": "Michel Amauri da Silva Rangel", "processo": "64478017830169768", "assunto": "(Trab.) Perícia Ambiental", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Perícia"}, {"data": "29/07/2026", "dias": 25, "cliente": "Robert Lincoln de Souza Braga", "processo": "64478017830168564", "assunto": "Aud/SUM - UNA - Virtual", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Virtual", "tipo": "Audiência"}, {"data": "29/07/2026", "dias": 25, "cliente": "Vagner Antonio da Silva", "processo": "3030053344", "assunto": "Aud/Conciliação em Execução - VIRTUAL", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Virtual", "tipo": "Audiência"}, {"data": "30/07/2026", "dias": 26, "cliente": "Paulo Ricardo Fiel de Lima", "processo": "64478017830167984", "assunto": "Aud/ORD - UNA - Presencial", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Presencial", "tipo": "Audiência"}, {"data": "31/07/2026", "dias": 27, "cliente": "JOSE MATHEUS GONCALVES SILVA", "processo": "64478017830169704", "assunto": "Aud/ORD INICIAL - Virtual", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Virtual", "tipo": "Audiência"}, {"data": "03/08/2026", "dias": 30, "cliente": "Ednaldo Francisco da Costa", "processo": "64478017830165492", "assunto": "Aud/ORD - Instrução - Hibrida", "responsavel": "Audiências e Pericias", "notif": "Cliente Ainda Não Notificado", "modal": "Híbrida", "tipo": "Audiência"}], "urgente_tipo": {"Presencial": 2, "Virtual": 4, "Perícia": 7, "Híbrida": 1}, "fila_total": 386, "fila_mes": {"2026-08": 90, "2026-09": 114, "2026-10": 79, "2026-11": 73, "2026-12": 30}, "fila_tipo": {"Perícia": 5, "Virtual": 253, "Presencial": 123, "Perícia médica": 3, "Híbrida": 2}}};
+document.getElementById('dtAtual').textContent=D.atualizado;
+const A=D.alertas, N=D.notificacao;
+const critico=A.nomeacao.length+A.nao_notificado.length+A.desaparecidos.length+N.urgente.length;
+const atencao=A.nao_confirmado.length+A.encerramento.length+A.canceladas.length+A.generico_futuro.length+A.atividade.length+A.desconhecido.length;
+const totalAcoes=critico+atencao;
+const tabs=[{id:'acoes',lbl:'⚑ Ações Recomendadas',badge:totalAcoes},{id:'visao',lbl:'Visão do Ano'},{id:'futuras',lbl:'Próximos 7 dias'},{id:'notif',lbl:'Notificação de Clientes',badge:N.urgente.length+N.urgentissimo.length},{id:'advogados',lbl:'Advogados'}];
+const bar=document.getElementById('tabbar');
+tabs.forEach((t,i)=>{const b=document.createElement('button');b.className=i===0?'active':'';
+ b.innerHTML=t.lbl+(t.badge?` <span class="badge">${t.badge}</span>`:'');
+ b.onclick=()=>{document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById('p-'+t.id).classList.add('active');window.scrollTo(0,0)};bar.appendChild(b);});
+const esc=s=>String(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function tbl(rows,cols){if(!rows.length)return '<div class="empty">Nenhum registro nesta condição. ✓</div>';
+ let h='<table><thead><tr>'+cols.map(c=>`<th>${c[1]}</th>`).join('')+'</tr></thead><tbody>';
+ rows.forEach(r=>{h+='<tr>'+cols.map(c=>`<td>${esc(r[c[0]])}</td>`).join('')+'</tr>';});return h+'</tbody></table>';}
+// chips: um por cliente, TODOS (sem +N)
+function chips(rows,showDias){if(!rows.length)return '<div class="empty">Nenhum. ✓</div>';
+ return '<div class="chips">'+rows.map(r=>`<span class="chip">${esc(r.cliente||'(sem nome)')}${showDias?`<span class="d">${r.dias}d</span>`:''}</span>`).join('')+'</div>';}
+
+// ---- AÇÕES ----
+function buildAcoes(){
+ const acts=[];
+ if(N.urgente.length)acts.push({p:1,t:`${N.urgente.length} clientes sem notificação com audiência em 8–30 dias`,d:'Viola a regra interna (notificar em até 30 dias). Cobrar a equipe de notificação.',rows:N.urgente});
+ if(A.nao_notificado.length)acts.push({p:1,t:`${A.nao_notificado.length} clientes NÃO notificados com audiência em ≤7 dias`,d:'Urgentíssimo — risco de arquivamento. Notificar hoje.',rows:A.nao_notificado});
+ if(A.nomeacao.length)acts.push({p:1,t:`${A.nomeacao.length} audiências sem responsável (≤7 dias)`,d:'Nomear advogado antes da data.',rows:A.nomeacao});
+ if(A.desaparecidos.length)acts.push({p:1,t:`${A.desaparecidos.length} clientes DESAPARECIDOS com audiência futura`,d:'Localização urgente.',rows:A.desaparecidos});
+ if(A.nao_confirmado.length)acts.push({p:2,t:`${A.nao_confirmado.length} clientes notificados mas SEM confirmação (≤7 dias)`,d:'Cobrar confirmação de presença.',rows:A.nao_confirmado});
+ if(A.canceladas.length){const f=A.canceladas_sem_notif.length;acts.push({p:2,t:`${A.canceladas.length} audiências CANCELADAS nos próximos 7 dias`,d:f?`ATENÇÃO: ${f} sem confirmação de aviso ao cliente.`:'Todas com cliente já avisado do cancelamento ✓ — conferir para o cliente não ir ao fórum à toa.',rows:A.canceladas});}
+ if(A.atividade.length)acts.push({p:2,t:`${A.atividade.length} concluídas/canceladas sem baixa de atividade`,d:'Cobrar controladoria (encerrada há +2 dias, campo vazio).',rows:A.atividade});
+ if(A.encerramento.length)acts.push({p:2,t:`${A.encerramento.length} encerramentos sem nomeado (≤7 dias)`,d:'Verificar se precisa acompanhamento.',rows:A.encerramento});
+ if(A.generico_futuro.length)acts.push({p:2,t:`${A.generico_futuro.length} audiências futuras sem tipo especificado`,d:'Pedir correção do cadastro no Datajuri.',rows:A.generico_futuro});
+ if(A.desconhecido.length)acts.push({p:2,t:`${A.desconhecido.length} assunto(s) fora do padrão`,d:'Revisar se é audiência real.',rows:A.desconhecido});
+ acts.sort((a,b)=>a.p-b.p);
+ let h=`<div class="ia-box"><h3>⚑ O que precisa da sua atenção</h3><div class="ia-sub">Gerado pelas regras validadas · ${D.atualizado} · ordem de prioridade</div>`;
+ if(!acts.length)h+='<div class="empty">Nenhuma ação pendente. Tudo sob controle. ✓</div>';
+ acts.forEach((a,i)=>{h+=`<div class="ia-item p${a.p}"><div class="rank">${i+1}</div><div class="txt"><strong>${esc(a.t)}</strong><span class="desc">${esc(a.d)}</span>${a.rows?chips(a.rows,a.p===1):''}</div></div>`;});
+ h+='</div><div class="note"><b>Prioridade:</b> <span style="color:var(--bordo)">■ 1 Crítico (hoje)</span> · <span style="color:var(--alerta)">■ 2 Atenção (esta semana)</span></div>';
+ return h;}
+document.getElementById('p-acoes').innerHTML=buildAcoes();
+
+function barRow(name,v,mx,alt){const w=Math.max(3,Math.round(v/mx*100));return `<div class="bar-row"><div class="name">${esc(name)}</div><div class="track"><div class="fill ${alt?'alt':''}" style="width:${w}%">${v}</div></div></div>`;}
+function buildVisao(){const k=D.kpis;let h='<div class="section-title">Números do ano</div><div class="kpi-grid">';
+ const kpi=(n,l,hint,cls)=>`<div class="kpi ${cls||''}"><div class="num">${n}</div><div class="lbl">${l}</div>${hint?`<div class="hint">${hint}</div>`:''}</div>`;
+ h+=kpi(k.total,'Total de compromissos','audiências + perícias + julgamentos')+kpi(k.concluidas,'Concluídas','','good')+kpi(k.canceladas,'Canceladas')+kpi(k.futuras,'Ainda vão acontecer','situação não iniciado')+kpi(k.virtuais,'Virtuais')+kpi(k.presenciais,'Presenciais')+kpi(k.desaparecidos_ano,'Clientes desaparecidos','no ano',(k.desaparecidos_ano?'warn':''))+kpi(k.media_interna,'Média por advogado','só internos')+'</div>';
+ h+='<div class="section-title">Compromissos por tipo</div><div class="card">';
+ const tp=Object.entries(D.tipos).filter(([k])=>k!=='Ignorar').sort((a,b)=>b[1]-a[1]);const mx=Math.max(...tp.map(x=>x[1]));
+ tp.forEach(([n,v],i)=>h+=barRow(n,v,mx,i%2));h+='<div class="note">Julgamentos (TRT/TST) e perícias médicas não recebem advogado — separados das audiências.</div></div>';
+ h+='<div class="cards-2"><div class="card"><h3>Audiências por fase</h3>';
+ const fs=Object.entries(D.fases).filter(([k])=>k!=='Ratificação Acordo').sort((a,b)=>b[1]-a[1]);const mf=Math.max(...fs.map(x=>x[1]));
+ fs.forEach(([n,v],i)=>h+=barRow(n,v,mf,i%2));h+='</div><div class="card"><h3>Por natureza do processo</h3>';
+ const nt=Object.entries(D.natureza).sort((a,b)=>b[1]-a[1]);const mn=Math.max(...nt.map(x=>x[1]));
+ nt.forEach(([n,v],i)=>h+=barRow(n,v,mn,i%2));h+='</div></div>';
+ h+='<div class="section-title">Distribuição ao longo do ano</div><div class="card"><h3>Compromissos por mês</h3>';
+ const ms=Object.entries(D.mensal);const mm=Math.max(...ms.map(x=>x[1]));
+ const nm={'01':'Jan','02':'Fev','03':'Mar','04':'Abr','05':'Mai','06':'Jun','07':'Jul','08':'Ago','09':'Set','10':'Out','11':'Nov','12':'Dez'};
+ ms.forEach(([n,v],i)=>h+=barRow(nm[n.split('-')[1]],v,mm,i%2));h+='</div>';return h;}
+document.getElementById('p-visao').innerHTML=buildVisao();
+
+function block(color,ico,title,desc,rows,cols){return `<div class="alert-block ${color}"><div class="alert-head"><span class="ico">${ico}</span>${esc(title)}<span class="alert-count">${rows.length}</span></div><div class="alert-desc">${esc(desc)}</div>${tbl(rows,cols)}</div>`;}
+function buildFuturas(){let h='<div class="section-title">Alertas da janela de 7 dias corridos</div>';
+ h+=block('red','⛔','Sem responsável nomeado','Não iniciadas em ≤7 dias sem advogado. Excluídos: julgamento, perícia médica, cancelada.',A.nomeacao,[['data','Data'],['cliente','Cliente'],['assunto','Tipo'],['processo','Processo']]);
+ h+=block('red','⛔','Clientes NÃO notificados','Audiência em ≤7 dias, cliente ainda não notificado.',A.nao_notificado,[['data','Data'],['cliente','Cliente'],['assunto','Audiência']]);
+ h+=block('red','⛔','Clientes DESAPARECIDOS (audiência futura)','Localização urgente.',A.desaparecidos,[['data','Data'],['cliente','Cliente'],['assunto','Audiência'],['processo','Processo']]);
+ h+=block('yellow','⚠','Notificados mas SEM confirmação','Avisado, não confirmou. Cobrar confirmação. (Cancelada e perícia médica fora.)',A.nao_confirmado,[['data','Data'],['cliente','Cliente'],['assunto','Audiência'],['notif','Status']]);
+ h+=block('yellow','⚠','Audiências CANCELADAS','Não nomeia. Confirmar se o cliente foi avisado do cancelamento.',A.canceladas,[['data','Data'],['cliente','Cliente'],['assunto','Audiência'],['notif','Notificação']]);
+ h+=block('yellow','⚠','Encerramentos sem nomeado','Nem sempre exigem advogado — verificar.',A.encerramento,[['data','Data'],['cliente','Cliente'],['assunto','Audiência']]);
+ h+=block('yellow','⚠','Futuras sem tipo especificado','Lançadas como "Audiência" genérico — corrigir cadastro.',A.generico_futuro,[['data','Data'],['cliente','Cliente'],['processo','Processo']]);
+ return h;}
+document.getElementById('p-futuras').innerHTML=buildFuturas();
+
+// ---- NOTIFICAÇÃO ----
+function buildNotif(){
+ let h='<div class="section-title">Equipe de Notificação — Audiências e Perícias</div>';
+ h+='<div class="note" style="margin-bottom:20px;border-left-color:var(--bordo)"><b>Regra interna:</b> todo cliente deve ser <b>notificado</b> (não precisa confirmar) em até <b>30 dias</b> antes da audiência/perícia. "Falta notificar" = status "Cliente ainda não notificado" ou em branco. Perícia médica entra (o cliente é periciado).</div>';
+ h+=block('red','⛔','Urgentíssimo — sem notificação, audiência em ≤7 dias','Notificar hoje. Risco de arquivamento por ausência.',N.urgentissimo,[['data','Data'],['cliente','Cliente'],['assunto','Tipo']]);
+ // 8-30 com chips + quebra por tipo
+ let tipoStr=Object.entries(N.urgente_tipo).map(([k,v])=>`${k}: ${v}`).join(' · ');
+ h+=`<div class="alert-block yellow"><div class="alert-head"><span class="ico">⚠</span>Urgente — viola a regra dos 30 dias (audiência em 8–30 dias)<span class="alert-count">${N.urgente.length}</span></div>
+ <div class="alert-desc">Estes clientes têm audiência dentro de 30 dias e ainda não foram notificados. Cobrar a equipe.${tipoStr?` &nbsp;<b>Por tipo:</b> ${esc(tipoStr)}`:''}</div>
+ ${tbl(N.urgente,[['data','Data'],['cliente','Cliente'],['assunto','Tipo de audiência'],['modal','Modalidade']])}</div>`;
+ // fila >30 = só número, por mês, NÃO é cobrança
+ h+='<div class="section-title">Fila do ano — acima de 30 dias (planejamento, não cobrança)</div>';
+ h+=`<div class="card"><h3>Clientes ainda não notificados por mês de audiência</h3>
+ <div class="note" style="margin-top:0;margin-bottom:16px">Total: <b>${N.fila_total}</b> clientes. Isto <b>não é atraso</b> — são audiências distantes que ainda não entraram na janela de 30 dias. Serve para a equipe dimensionar o volume que vem pela frente.</div>`;
+ const fm=Object.entries(N.fila_mes);const mm=Math.max(...fm.map(x=>x[1]),1);
+ const nm={'2026-08':'Agosto','2026-09':'Setembro','2026-10':'Outubro','2026-11':'Novembro','2026-12':'Dezembro'};
+ fm.forEach(([k,v],i)=>h+=barRow(nm[k]||k,v,mm,i%2));
+ h+='<div style="margin-top:16px"><b style="font-size:13px">Por tipo:</b> <div class="chips" style="margin-top:8px">'+Object.entries(N.fila_tipo).map(([k,v])=>`<span class="chip mini">${esc(k)}: <b>${v}</b></span>`).join('')+'</div></div>';
+ h+='</div>';
+ return h;}
+document.getElementById('p-notif').innerHTML=buildNotif();
+
+function heatTable(obj,keys,labels,leg){let h='<div style="overflow-x:auto"><table class="heat"><thead><tr><th class="name">Advogado</th>';labels.forEach(c=>h+=`<th>${esc(c)}</th>`);h+='<th>Total</th></tr></thead><tbody>';
+ const allv=[];obj.forEach(a=>a.vals.forEach(v=>allv.push(v)));const mh=Math.max(...allv,1);
+ obj.forEach(a=>{h+=`<tr><td class="name">${esc(a.nome)}</td>`;a.vals.forEach(v=>{const int=v/mh;const bg=v===0?'#fff':`rgba(155,27,58,${0.10+int*0.72})`;const col=int>0.55?'#fff':'var(--preto)';h+=`<td style="background:${bg};color:${col}">${v||'·'}</td>`;});h+=`<td style="background:#f4f4f5"><b>${a.total}</b></td></tr>`;});
+ h+='</tbody></table></div>'+(leg?`<div class="note">${leg}</div>`:'');return h;}
+function buildAdv(){let h='<div class="section-title">Produção por pessoa (ano)</div>';
+ h+='<div class="pill-row">'+`<div class="pill">Média interna: <b>${D.kpis.media_interna}</b>/advogado</div>`+`<div class="pill">Correspondentes: <b>${D.kpis.correspondente}</b></div>`+`<div class="pill">Sem nomeado: <b>${D.kpis.sem_nomeado_ano}</b></div>`+'</div>';
+ h+='<div class="card"><table><thead><tr><th>Pessoa</th><th>Categoria</th><th style="width:42%">Audiências</th><th>Total</th></tr></thead><tbody>';
+ const pr=D.producao.filter(p=>p.cat!=='Sem nomeado');const mx=Math.max(...pr.map(p=>p.total));
+ pr.forEach(p=>{const w=Math.max(3,Math.round(p.total/mx*100));const cl=p.cat==='Correspondente'?'corresp':p.cat==='Assistente'?'assist':'interno';
+  h+=`<tr><td><b>${esc(p.nome)}</b></td><td><span class="tag ${cl}">${esc(p.cat)}</span></td><td><div class="track" style="background:var(--cinza-cl);border-radius:5px;height:20px"><div class="fill ${p.cat!=='Interno'?'alt':''}" style="width:${w}%;height:100%;border-radius:5px"></div></div></td><td><b>${p.total}</b></td></tr>`;});
+ h+='</tbody></table><div class="note">Correspondentes e assistente técnico fora da média interna (função distinta).</div></div>';
+ h+='<div class="section-title">Perfil por fase</div><div class="card">'+heatTable(D.heatmap.advs,D.heatmap.fases,D.heatmap.fases,'Célula mais escura = mais audiências daquela fase.')+'</div>';
+ const nm={'2026-01':'Jan','2026-02':'Fev','2026-03':'Mar','2026-04':'Abr','2026-05':'Mai','2026-06':'Jun','2026-07':'Jul'};
+ h+='<div class="section-title">Produção mês a mês (jan–jul)</div><div class="card">'+heatTable(D.mensal_adv.advs,D.mensal_adv.meses,D.mensal_adv.meses.map(m=>nm[m]),'Só meses decorridos.')+'</div>';
+ return h;}
+document.getElementById('p-advogados').innerHTML=buildAdv();
+</script></body></html>
