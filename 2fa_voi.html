@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Códigos 2FA — VOI Advogados</title>
+<style>
+  :root{
+    --bordo:#9B1B3A;
+    --preto:#2D2D2D;
+    --cinza:#f4f4f5;
+    --cinza-borda:#e4e4e7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    background:#fff;color:var(--preto);padding:16px;
+  }
+  h1{
+    font-size:18px;color:var(--bordo);margin-bottom:4px;font-weight:700;
+  }
+  .sub{font-size:13px;color:#666;margin-bottom:18px;}
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;
+  }
+  .card{
+    border:1px solid var(--cinza-borda);border-radius:12px;overflow:hidden;background:#fff;
+  }
+  .card-head{
+    background:var(--bordo);color:#fff;padding:10px 14px;font-size:14px;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card-body{padding:16px 14px;text-align:center;}
+  .codigo{
+    font-size:40px;font-weight:700;letter-spacing:6px;color:var(--preto);
+    font-variant-numeric:tabular-nums;
+  }
+  .barra-wrap{
+    margin-top:12px;height:8px;background:var(--cinza);border-radius:99px;overflow:hidden;
+  }
+  .barra{
+    height:100%;background:var(--bordo);width:100%;transition:width 1s linear;
+  }
+  .tempo{
+    margin-top:8px;font-size:12px;color:#666;
+  }
+  .btn-copiar{
+    margin-top:12px;border:1px solid var(--bordo);background:#fff;color:var(--bordo);
+    padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;transition:all .15s;
+  }
+  .btn-copiar:hover{background:var(--bordo);color:#fff;}
+  .btn-copiar.copiado{background:#1a7a3a;border-color:#1a7a3a;color:#fff;}
+  .aviso{
+    margin-top:20px;font-size:12px;color:#999;text-align:center;
+  }
+</style>
+</head>
+<body>
+  <h1>Códigos de Autenticação (2FA)</h1>
+  <div class="sub">Use o código do sistema correspondente ao fazer login. Ele muda a cada 30 segundos.</div>
+  <div class="grid" id="grid"></div>
+  <div class="aviso">Os códigos são gerados automaticamente e válidos por 30 segundos.</div>
+
+<script>
+/* ===================================================================
+   LISTA DE SISTEMAS — para adicionar/remover, edite só este bloco.
+   Cada item: { nome: "Nome exibido", chave: "CHAVE_BASE32" }
+   Por enquanto: chave de TESTE do RFC (pública, sem risco).
+   =================================================================== */
+const SISTEMAS = [
+  { nome: "2FA Teste", chave: "JBSWY3DPEHPK3PXP" }
+];
+
+/* ===== Cálculo TOTP (mesmo algoritmo validado no Office Script) ===== */
+function base32ToBytes(base32){
+  const alf="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  const limpa=base32.toUpperCase().replace(/=+$/,"").replace(/\s/g,"");
+  let bits="";
+  for(const c of limpa){
+    const v=alf.indexOf(c);
+    if(v===-1) continue;
+    bits+=v.toString(2).padStart(5,"0");
+  }
+  const bytes=[];
+  for(let i=0;i+8<=bits.length;i+=8){
+    bytes.push(parseInt(bits.substr(i,8),2));
+  }
+  return new Uint8Array(bytes);
+}
+
+function rotl(n,s){return ((n<<s)|(n>>>(32-s)))>>>0;}
+
+function sha1(data){
+  let h0=0x67452301,h1=0xEFCDAB89,h2=0x98BADCFE,h3=0x10325476,h4=0xC3D2E1F0;
+  const ml=data.length*8;
+  const withOne=new Uint8Array(((data.length+8)>>6)*64+64);
+  withOne.set(data);
+  withOne[data.length]=0x80;
+  const dv=new DataView(withOne.buffer);
+  dv.setUint32(withOne.length-4, ml>>>0, false);
+  dv.setUint32(withOne.length-8, Math.floor(ml/0x100000000), false);
+  for(let chunk=0;chunk<withOne.length;chunk+=64){
+    const w=new Array(80);
+    for(let i=0;i<16;i++) w[i]=dv.getUint32(chunk+i*4,false);
+    for(let i=16;i<80;i++){
+      const v=w[i-3]^w[i-8]^w[i-14]^w[i-16];
+      w[i]=((v<<1)|(v>>>31))>>>0;
+    }
+    let a=h0,b=h1,c=h2,d=h3,e=h4;
+    for(let i=0;i<80;i++){
+      let f,k;
+      if(i<20){f=(b&c)|(~b&d);k=0x5A827999;}
+      else if(i<40){f=b^c^d;k=0x6ED9EBA1;}
+      else if(i<60){f=(b&c)|(b&d)|(c&d);k=0x8F1BBCDC;}
+      else{f=b^c^d;k=0xCA62C1D6;}
+      const temp=(rotl(a,5)+f+e+k+w[i])>>>0;
+      e=d;d=c;c=rotl(b,30);b=a;a=temp;
+    }
+    h0=(h0+a)>>>0;h1=(h1+b)>>>0;h2=(h2+c)>>>0;h3=(h3+d)>>>0;h4=(h4+e)>>>0;
+  }
+  const out=new Uint8Array(20);
+  const odv=new DataView(out.buffer);
+  odv.setUint32(0,h0,false);odv.setUint32(4,h1,false);odv.setUint32(8,h2,false);
+  odv.setUint32(12,h3,false);odv.setUint32(16,h4,false);
+  return out;
+}
+
+function hmacSha1(key,msg){
+  const bs=64;
+  let k=key;
+  if(k.length>bs) k=sha1(k);
+  if(k.length<bs){const n=new Uint8Array(bs);n.set(k);k=n;}
+  const o=new Uint8Array(bs),ip=new Uint8Array(bs);
+  for(let i=0;i<bs;i++){o[i]=k[i]^0x5c;ip[i]=k[i]^0x36;}
+  const cat=(x,y)=>{const r=new Uint8Array(x.length+y.length);r.set(x);r.set(y,x.length);return r;};
+  return sha1(cat(o, sha1(cat(ip,msg))));
+}
+
+function gerarTOTP(chaveBase32, contador){
+  const buf=new Uint8Array(8);
+  let c=contador;
+  for(let i=7;i>=0;i--){buf[i]=c&0xff;c=Math.floor(c/256);}
+  const hash=hmacSha1(base32ToBytes(chaveBase32), buf);
+  const off=hash[hash.length-1]&0x0f;
+  const bin=((hash[off]&0x7f)<<24)|((hash[off+1]&0xff)<<16)|((hash[off+2]&0xff)<<8)|(hash[off+3]&0xff);
+  return (bin%1000000).toString().padStart(6,"0");
+}
+
+/* ===== Montagem e atualização da tela ===== */
+function formatar(codigo){
+  return codigo.slice(0,3)+" "+codigo.slice(3);
+}
+
+function montar(){
+  const grid=document.getElementById("grid");
+  grid.innerHTML="";
+  SISTEMAS.forEach((s,idx)=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`
+      <div class="card-head">🔐 ${s.nome}</div>
+      <div class="card-body">
+        <div class="codigo" id="cod-${idx}">------</div>
+        <div class="barra-wrap"><div class="barra" id="barra-${idx}"></div></div>
+        <div class="tempo" id="tempo-${idx}">--</div>
+        <button class="btn-copiar" id="btn-${idx}" onclick="copiar(${idx})">📋 Copiar código</button>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function atualizar(){
+  const agora=Date.now()/1000;
+  const contador=Math.floor(agora/30);
+  const restante=30-(Math.floor(agora)%30);
+  SISTEMAS.forEach((s,idx)=>{
+    const codigo=gerarTOTP(s.chave, contador);
+    document.getElementById("cod-"+idx).textContent=formatar(codigo);
+    document.getElementById("barra-"+idx).style.width=(restante/30*100)+"%";
+    document.getElementById("tempo-"+idx).textContent="Renova em "+restante+"s";
+  });
+}
+
+function copiar(idx){
+  const agora=Date.now()/1000;
+  const contador=Math.floor(agora/30);
+  const codigo=gerarTOTP(SISTEMAS[idx].chave, contador); // sem espaço, pronto pra colar
+  const btn=document.getElementById("btn-"+idx);
+  const finalizar=()=>{
+    btn.textContent="✔ Copiado!";
+    btn.classList.add("copiado");
+    setTimeout(()=>{btn.textContent="📋 Copiar código";btn.classList.remove("copiado");},1500);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(codigo).then(finalizar).catch(()=>fallbackCopiar(codigo,finalizar));
+  }else{
+    fallbackCopiar(codigo,finalizar);
+  }
+}
+function fallbackCopiar(texto,cb){
+  const ta=document.createElement("textarea");
+  ta.value=texto;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand("copy");}catch(e){}
+  document.body.removeChild(ta);cb();
+}
+
+montar();
+atualizar();
+setInterval(atualizar,1000);
+</script>
+</body>
+</html>
