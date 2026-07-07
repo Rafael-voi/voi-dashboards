@@ -305,12 +305,12 @@ function renderizar(d){
   ${vencs.length>0?`<div class="alert-s"><div class="alert-ct" style="color:#eab308">🟡 Vencidos sem conclusão</div>${vencs.map(v=>`<div class="alert-row alert-y"><div class="alert-txt"><b>${v.closer}:</b> ${v.cliente} (era ${v.data_era}) — preencher resultado</div></div>`).join('')}</div>`:''}
   ${dups.length>0?`<div class="alert-s"><div class="alert-ct" style="color:#f97316">🟠 Cadastros duplicados — SDR</div>${dups.map(d=>`<div class="alert-row alert-o"><div class="alert-txt"><b>${d.cliente}</b> — cadastrado 2x em ${d.data} pelo SDR ${d.sdr}. Remover duplicata.</div></div>`).join('')}</div>`:''}
   ${semcap.length>0?`<div class="alert-s"><div class="alert-ct" style="color:#eab308">🟡 Contratos sem captador</div>${semcap.map(s=>`<div class="alert-row alert-y"><div class="alert-txt"><b>${s.contrato}</b> — ${s.closer}. Corrigir no Datajuri.</div></div>`).join('')}</div>`:''}
-  <div class="alert-s">
-    <div class="alert-ct" style="color:#3b82f6">🔵 Análise do período</div>
-    ${ai.resumo_do_mes?`<div class="alert-row alert-b"><div class="alert-txt">${ai.resumo_do_mes}</div></div>`:''}
-    ${(ai.destaques_positivos||[]).map(d=>`<div class="alert-row alert-b"><div class="alert-txt">✅ ${d}</div></div>`).join('')}
-    ${(ai.alertas_criticos||[]).map(a=>`<div class="alert-row alert-r"><div class="alert-txt"><b>${a.responsavel}:</b> ${a.problema} → ${a.acao_recomendada}</div></div>`).join('')}
-  </div>`;
+  `;
+  // Bloco "Análise do período" (analise_ia / GPT) ocultado intencionalmente.
+  // Motivo: a prosa gerada apresentava somas incoerentes (ex: 6 VOI + 10 CCC como composição de 25)
+  // e classificava SDR como closer. Os dados estruturados acima já cobrem pendentes, sem captador e fichas.
+  // O analise_ia continua sendo gerado e salvo no JSON; apenas não é renderizado.
+  // Para reativar: restaurar o bloco <div class="alert-s"> de "Análise do período".
 }
 
 // Inicialização
