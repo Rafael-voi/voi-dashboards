@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta SDR — VOI Advogados</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Roboto+Mono:wght@500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bordô: #8B1A3A;
+  --bordô-escuro: #6B1229;
+  --bordô-suave: rgba(139,26,58,.12);
+  --preto: #1A1A1A;
+  --cinza-fundo: #F4F4F5;
+  --cinza-card: #FFFFFF;
+  --cinza-borda: #E4E4E7;
+  --cinza-texto: #71717A;
+  --verde: #16A34A;
+  --verde-suave: rgba(22,163,74,.1);
+  --laranja: #EA580C;
+  --laranja-suave: rgba(234,88,12,.1);
+  --amarelo: #CA8A04;
+  --amarelo-suave: rgba(202,138,4,.1);
+}
+
+body {
+  background: var(--cinza-fundo);
+  font-family: 'Inter', sans-serif;
+  color: var(--preto);
+  min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+  background: var(--bordô);
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.h-left { display: flex; align-items: center; gap: 14px; }
+.logo { width: 48px; height: 48px; object-fit: contain; border-radius: 4px; }
+.h-titulo { color: #fff; font-size: 18px; font-weight: 700; letter-spacing: -.3px; }
+.h-sub { color: rgba(255,255,255,.6); font-size: 11px; margin-top: 2px; font-weight: 400; }
+.h-right { text-align: right; }
+.h-mes { color: rgba(255,255,255,.9); font-size: 13px; font-weight: 600; }
+.h-atualizado { color: rgba(255,255,255,.5); font-size: 10px; margin-top: 3px; font-family: 'Roboto Mono', monospace; }
+
+/* LAYOUT */
+.content { padding: 24px 28px; max-width: 1200px; margin: 0 auto; }
+.section-label {
+  font-size: 10px; font-weight: 700; color: var(--cinza-texto);
+  text-transform: uppercase; letter-spacing: .12em; margin-bottom: 14px;
+}
+
+/* METAS — barra com foguete */
+.metas-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+.meta-card {
+  background: var(--cinza-card);
+  border-radius: 12px;
+  padding: 20px 22px;
+  border: 1px solid var(--cinza-borda);
+  position: relative;
+  overflow: hidden;
+}
+.meta-card.atingida { border-color: var(--verde); background: linear-gradient(135deg, #fff, rgba(22,163,74,.04)); }
+.meta-card.atingida::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--verde); }
+.meta-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--bordô); }
+
+.meta-label { font-size: 10px; font-weight: 700; color: var(--cinza-texto); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px; }
+.meta-numeros { display: flex; align-items: baseline; gap: 6px; margin-bottom: 16px; }
+.meta-atual { font-size: 36px; font-weight: 900; color: var(--preto); line-height: 1; font-family: 'Roboto Mono', monospace; }
+.meta-sep { font-size: 20px; color: var(--cinza-borda); font-weight: 300; }
+.meta-total { font-size: 20px; font-weight: 600; color: var(--cinza-texto); font-family: 'Roboto Mono', monospace; }
+.meta-unidade { font-size: 11px; color: var(--cinza-texto); margin-left: 4px; }
+
+/* Barra foguete */
+.foguete-track {
+  height: 32px;
+  background: var(--cinza-fundo);
+  border-radius: 16px;
+  position: relative;
+  overflow: visible;
+  margin-bottom: 8px;
+}
+.foguete-fill {
+  height: 100%;
+  border-radius: 16px;
+  background: linear-gradient(90deg, var(--bordô-escuro), var(--bordô));
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  position: relative;
+  min-width: 32px;
+}
+.foguete-fill.verde { background: linear-gradient(90deg, #15803d, var(--verde)); }
+.foguete-emoji {
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.2));
+  animation: foguete-float 2s ease-in-out infinite;
+}
+@keyframes foguete-float {
+  0%,100% { transform: translateY(-50%) rotate(-45deg); }
+  50% { transform: translateY(-54%) rotate(-45deg); }
+}
+.foguete-fill.verde .foguete-emoji { animation: none; transform: translateY(-50%) rotate(-45deg); }
+
+.meta-pct {
+  font-size: 11px; font-weight: 600; color: var(--cinza-texto);
+  display: flex; justify-content: space-between;
+}
+.meta-pct span:last-child { color: var(--bordô); font-family: 'Roboto Mono', monospace; }
+.meta-pct.verde span:last-child { color: var(--verde); }
+
+/* EXPLOSÃO META ATINGIDA */
+.badge-atingida {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--verde-suave); color: var(--verde);
+  font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+  margin-top: 8px; text-transform: uppercase; letter-spacing: .06em;
+}
+
+/* SDR CARDS */
+.sdrs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+.sdr-card {
+  background: var(--cinza-card);
+  border-radius: 12px;
+  border: 1px solid var(--cinza-borda);
+  overflow: hidden;
+}
+.sdr-header {
+  background: linear-gradient(135deg, var(--bordô), var(--bordô-escuro));
+  padding: 16px 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+.sdr-foto {
+  width: 56px; height: 56px; border-radius: 50%;
+  object-fit: cover; object-position: center top;
+  border: 3px solid rgba(255,255,255,.3);
+  flex-shrink: 0;
+}
+.sdr-nome { color: #fff; font-size: 15px; font-weight: 700; }
+.sdr-cargo { color: rgba(255,255,255,.6); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; margin-top: 2px; }
+
+.sdr-body { padding: 16px 20px; }
+
+/* Piso individual */
+.piso-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-radius: 8px; margin-bottom: 12px;
+  border: 1px solid var(--cinza-borda);
+}
+.piso-row.ok { background: var(--verde-suave); border-color: rgba(22,163,74,.2); }
+.piso-row.pendente { background: var(--laranja-suave); border-color: rgba(234,88,12,.2); }
+.piso-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.piso-row.ok .piso-label { color: var(--verde); }
+.piso-row.pendente .piso-label { color: var(--laranja); }
+.piso-valor { font-size: 13px; font-weight: 700; font-family: 'Roboto Mono', monospace; }
+.piso-row.ok .piso-valor { color: var(--verde); }
+.piso-row.pendente .piso-valor { color: var(--laranja); }
+
+/* Stats grid */
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 14px; }
+.stat-box { background: var(--cinza-fundo); border-radius: 8px; padding: 10px; text-align: center; }
+.stat-n { font-size: 22px; font-weight: 800; color: var(--preto); font-family: 'Roboto Mono', monospace; line-height: 1; }
+.stat-l { font-size: 9px; color: var(--cinza-texto); text-transform: uppercase; letter-spacing: .06em; margin-top: 3px; }
+
+/* Classificação */
+.class-titulo { font-size: 9px; font-weight: 700; color: var(--cinza-texto); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+.class-grid { display: flex; gap: 6px; flex-wrap: wrap; }
+.class-badge {
+  display: flex; flex-direction: column; align-items: center;
+  background: var(--bordô-suave); border-radius: 8px;
+  padding: 6px 12px; min-width: 44px;
+}
+.class-n { font-size: 16px; font-weight: 800; color: var(--bordô); font-family: 'Roboto Mono', monospace; }
+.class-l { font-size: 9px; color: var(--cinza-texto); font-weight: 600; }
+
+/* Controle diário */
+.diario-card {
+  background: var(--cinza-card);
+  border-radius: 12px;
+  border: 1px solid var(--cinza-borda);
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+.diario-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.diario-data { font-size: 11px; font-family: 'Roboto Mono', monospace; color: var(--cinza-texto); }
+.diario-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.diario-sdr { }
+.diario-sdr-nome { font-size: 12px; font-weight: 700; color: var(--preto); margin-bottom: 10px; border-bottom: 1px solid var(--cinza-borda); padding-bottom: 6px; }
+.diario-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+.ds { background: var(--cinza-fundo); border-radius: 7px; padding: 8px; text-align: center; }
+.ds-n { font-size: 20px; font-weight: 800; font-family: 'Roboto Mono', monospace; color: var(--preto); }
+.ds-l { font-size: 9px; color: var(--cinza-texto); text-transform: uppercase; letter-spacing: .05em; margin-top: 2px; }
+
+/* Origem */
+.origem-titulo { font-size: 9px; font-weight: 700; color: var(--cinza-texto); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+.origem-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.origem-lbl { font-size: 10px; color: var(--preto); width: 140px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.origem-track { flex: 1; height: 6px; background: var(--cinza-fundo); border-radius: 3px; overflow: hidden; }
+.origem-fill { height: 100%; border-radius: 3px; background: var(--bordô); }
+.origem-n { font-size: 10px; font-weight: 700; color: var(--preto); width: 20px; text-align: right; font-family: 'Roboto Mono', monospace; }
+
+.ts { text-align: right; font-size: 9px; color: var(--cinza-texto); padding: 8px 28px 16px; font-family: 'Roboto Mono', monospace; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="h-left">
+    <img src="https://rafael-voi.github.io/voi-dashboards/Logo VOI Advogados_Prancheta 1.jpg" class="logo" alt="VOI">
+    <div>
+      <div class="h-titulo">Painel SDR — VOI Advogados</div>
+      <div class="h-sub">Metas e resultados da equipe comercial · Unidade VOI</div>
+    </div>
+  </div>
+  <div class="h-right">
+    <div class="h-mes" id="h-mes">—</div>
+    <div class="h-atualizado" id="h-atualizado">carregando...</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- METAS COLETIVAS -->
+  <div class="section-label">Metas do mês — equipe</div>
+  <div class="metas-grid" id="metas-grid">
+    <div class="meta-card"><div class="meta-label">carregando...</div></div>
+    <div class="meta-card"><div class="meta-label">carregando...</div></div>
+    <div class="meta-card"><div class="meta-label">carregando...</div></div>
+  </div>
+
+  <!-- CARDS SDR -->
+  <div class="section-label">Por SDR</div>
+  <div class="sdrs-grid" id="sdrs-grid"></div>
+
+  <!-- CONTROLE DIÁRIO -->
+  <div class="section-label">Controle do dia anterior</div>
+  <div class="diario-card" id="diario-card">
+    <div class="diario-header">
+      <span class="section-label" style="margin:0">Atendimentos e agendamentos</span>
+      <span class="diario-data" id="diario-data">—</span>
+    </div>
+    <div class="diario-grid" id="diario-grid"></div>
+  </div>
+
+</div>
+<div class="ts" id="ts"></div>
+
+<script>
+const BASE = 'https://rafael-voi.github.io/voi-dashboards/';
+const JSON_URL = BASE + 'dashboard_comercial_voi_data.json';
+const FOTOS = {
+  'Maria Isabella': BASE + 'Maria Isabella.jpeg',
+  'Douglas Giuliano': BASE + 'douglas.jpeg',
+};
+
+async function carregar() {
+  try {
+    const r = await fetch(JSON_URL + '?v=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    renderizar(d);
+  } catch(e) {
+    document.querySelector('.content').innerHTML = `<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:16px;color:#856404;font-size:13px">⚠️ Não foi possível carregar os dados.<br><small>${e.message}</small></div>`;
+  }
+}
+
+function barraFoguete(pct, atingida) {
+  const cls = atingida ? 'verde' : '';
+  return `<div class="foguete-track">
+    <div class="foguete-fill ${cls}" style="width:${pct}%">
+      <span class="foguete-emoji">${atingida ? '✅' : '🚀'}</span>
+    </div>
+  </div>`;
+}
+
+function renderizar(d) {
+  const m = d.metas?.sdr || {};
+  const sdrs = d.sdrs || [];
+  const per = d.periodo || {};
+
+  document.getElementById('h-mes').textContent = per.mes_referencia || '';
+  document.getElementById('h-atualizado').textContent = 'atualizado: ' + (d.atualizado_em || '').replace('T',' ').substring(0,16);
+  document.getElementById('ts').textContent = 'Última atualização: ' + new Date().toLocaleString('pt-BR');
+
+  // METAS
+  const vol = m.volume || {};
+  const ag = m.agendamentos || {};
+  const piso = m.piso_por_sdr || {};
+  const pisoTotal = Object.values(piso).reduce((s,p) => s + p.atual, 0);
+  const pisoMeta = Object.values(piso).reduce((s,p) => s + p.meta, 0);
+  const pisoAtingido = Object.values(piso).every(p => p.atingido);
+  const pisoPct = pisoMeta > 0 ? Math.min(100, Math.round(pisoTotal/pisoMeta*100)) : 0;
+
+  document.getElementById('metas-grid').innerHTML = `
+    <div class="meta-card ${pisoAtingido?'atingida':''}">
+      <div class="meta-label">🔒 Gatilho de comissionamento</div>
+      <div class="meta-numeros">
+        <span class="meta-atual">${pisoTotal}</span>
+        <span class="meta-sep">/</span>
+        <span class="meta-total">${pisoMeta}</span>
+        <span class="meta-unidade">contratos VOI (individual)</span>
+      </div>
+      ${barraFoguete(pisoPct, pisoAtingido)}
+      <div class="meta-pct ${pisoAtingido?'verde':''}">
+        <span>Cada SDR precisa de 15 contratos VOI</span>
+        <span>${pisoPct}%</span>
+      </div>
+      ${pisoAtingido ? '<div class="badge-atingida">🎯 Comissionamento ativo</div>' : ''}
+    </div>
+
+    <div class="meta-card ${vol.atingido?'atingida':''}">
+      <div class="meta-label">📈 Meta de volume — coletiva</div>
+      <div class="meta-numeros">
+        <span class="meta-atual">${vol.atual||0}</span>
+        <span class="meta-sep">/</span>
+        <span class="meta-total">${vol.meta||50}</span>
+        <span class="meta-unidade">contratos VOI no mês</span>
+      </div>
+      ${barraFoguete(vol.pct||0, vol.atingido)}
+      <div class="meta-pct ${vol.atingido?'verde':''}">
+        <span>Bônus coletivo R$200 por SDR</span>
+        <span>${vol.pct||0}%</span>
+      </div>
+      ${vol.atingido ? '<div class="badge-atingida">🎉 Bônus R$200 por SDR garantido!</div>' : ''}
+    </div>
+
+    <div class="meta-card ${ag.atingido?'atingida':''}">
+      <div class="meta-label">📅 Meta de agendamentos — coletiva</div>
+      <div class="meta-numeros">
+        <span class="meta-atual">${ag.atual||0}</span>
+        <span class="meta-sep">/</span>
+        <span class="meta-total">${ag.meta||67}</span>
+        <span class="meta-unidade">atendimentos únicos</span>
+      </div>
+      ${barraFoguete(ag.pct||0, ag.atingido)}
+      <div class="meta-pct ${ag.atingido?'verde':''}">
+        <span>Bônus +15% sobre comissões do mês</span>
+        <span>${ag.pct||0}%</span>
+      </div>
+      ${ag.atingido ? '<div class="badge-atingida">🎉 Bônus +15% garantido!</div>' : ''}
+    </div>
+  `;
+
+  // SDR CARDS
+  document.getElementById('sdrs-grid').innerHTML = sdrs.map(s => {
+    const foto = FOTOS[s.nome] || '';
+    const piso_ind = piso[s.nome] || {meta:15,atual:0,atingido:false,pct:0};
+    const classes = ['C1','C2','C3','C4','C5'];
+    const classVoi = s.classificacao_voi || {};
+    const classCCC = s.classificacao_ccc || {};
+
+    const classHTML = classes.map(c => {
+      const chave = Object.keys(classVoi).find(k => k.startsWith(c)) || '';
+      const n = chave ? classVoi[chave] : 0;
+      return n > 0 ? `<div class="class-badge"><div class="class-n">${n}</div><div class="class-l">${c}</div></div>` : '';
+    }).join('');
+
+    const classCCCHTML = classes.map(c => {
+      const chave = Object.keys(classCCC).find(k => k.startsWith(c)) || '';
+      const n = chave ? classCCC[chave] : 0;
+      return n > 0 ? `<div class="class-badge" style="background:rgba(113,113,122,.1)"><div class="class-n" style="color:var(--cinza-texto)">${n}</div><div class="class-l">${c}</div></div>` : '';
+    }).join('');
+
+    return `<div class="sdr-card">
+      <div class="sdr-header">
+        ${foto ? `<img src="${foto}" class="sdr-foto" onerror="this.style.background='rgba(255,255,255,.2)'" alt="${s.nome}">` : '<div class="sdr-foto" style="background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:rgba(255,255,255,.7)">' + s.nome[0] + '</div>'}
+        <div>
+          <div class="sdr-nome">${s.nome}</div>
+          <div class="sdr-cargo">SDR · Unidade VOI</div>
+        </div>
+      </div>
+      <div class="sdr-body">
+        <div class="piso-row ${piso_ind.atingido?'ok':'pendente'}">
+          <span class="piso-label">${piso_ind.atingido ? '✅ Gatilho ativo' : '⏳ Gatilho pendente'}</span>
+          <span class="piso-valor">${piso_ind.atual}/${piso_ind.meta} contratos VOI</span>
+        </div>
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-n">${s.registros_brutos}</div><div class="stat-l">Atendidos</div></div>
+          <div class="stat-box"><div class="stat-n">${s.agendou_closer}</div><div class="stat-l">Agendou closer</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--bordô)">${s.contratos_voi}</div><div class="stat-l">Fechou VOI</div></div>
+          <div class="stat-box"><div class="stat-n" style="color:var(--cinza-texto)">${s.contratos_ccc}</div><div class="stat-l">Fechou CCC</div></div>
+        </div>
+        <div class="class-titulo">Contratos por classificação</div>
+        <div style="margin-bottom:6px;font-size:9px;font-weight:700;color:var(--bordô);text-transform:uppercase;letter-spacing:.06em">Unidade VOI</div>
+        <div class="class-grid" style="margin-bottom:10px">${classHTML || '<span style="font-size:10px;color:var(--cinza-texto)">—</span>'}</div>
+        <div style="margin-bottom:6px;font-size:9px;font-weight:700;color:var(--cinza-texto);text-transform:uppercase;letter-spacing:.06em">CCC / Parceiros</div>
+        <div class="class-grid">${classCCCHTML || '<span style="font-size:10px;color:var(--cinza-texto)">—</span>'}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // DIÁRIO
+  const ontem = d.periodo?.data_ontem || '';
+  document.getElementById('diario-data').textContent = ontem ? 'Referência: ' + ontem : '';
+  document.getElementById('diario-grid').innerHTML = sdrs.map(s => {
+    const di = s.diario || {};
+    const orig = di.por_origem || {};
+    const maxOrig = Math.max(...Object.values(orig).map(Number), 1);
+    const origHTML = Object.keys(orig).sort((a,b) => orig[b]-orig[a]).slice(0,5).map(k => {
+      const n = orig[k];
+      const label = k.replace('Unidade VOI - ','').replace('CCC - ','');
+      return `<div class="origem-row">
+        <div class="origem-lbl" title="${label}">${label}</div>
+        <div class="origem-track"><div class="origem-fill" style="width:${Math.round(n/maxOrig*100)}%"></div></div>
+        <div class="origem-n">${n}</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="diario-sdr">
+      <div class="diario-sdr-nome">${s.nome}</div>
+      <div class="diario-stats">
+        <div class="ds"><div class="ds-n">${di.atendimentos||0}</div><div class="ds-l">Atendimentos</div></div>
+        <div class="ds"><div class="ds-n" style="color:var(--bordô)">${di.agendamentos||0}</div><div class="ds-l">Agendamentos</div></div>
+      </div>
+      ${origHTML ? `<div class="origem-titulo">Origem</div>${origHTML}` : ''}
+    </div>`;
+  }).join('');
+}
+
+carregar();
+setInterval(carregar, 30 * 60 * 1000);
+</script>
+</body>
+</html>
