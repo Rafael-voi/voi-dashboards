@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Comercial — VOI Advogados</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bordo:#9B1B3A; --bordo-esc:#6d1329; --preto:#2D2D2D;
+  --verde:#16a34a; --verde-suave:rgba(22,163,74,.12);
+  --laranja:#c2410c; --laranja-suave:rgba(249,115,22,.1);
+  --cinza-texto:#6b7280; --cinza-fundo:#eef0f3; --cinza-borda:#d9dce1;
+  --bg:#f2f3f5; --branco:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Segoe UI',system-ui,sans-serif;color:var(--preto);min-height:100vh;padding-bottom:40px}
+@keyframes foguete-float{0%,100%{transform:translateY(-50%) rotate(-45deg)}50%{transform:translateY(-54%) rotate(-45deg)}}
+.mono{font-family:'Roboto Mono',monospace}
+
+.top{background:linear-gradient(135deg,var(--bordo),var(--bordo-esc));padding:18px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.top-left{display:flex;align-items:center;gap:16px}
+.logo-img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:6px;padding:3px}
+.top-title{font-size:22px;font-weight:800;color:#fff}
+.top-sub{font-size:12px;color:rgba(255,255,255,.7);margin-top:3px}
+.top-right{text-align:right;color:#fff}
+.top-mes{font-size:15px;font-weight:700}
+.top-atual{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px}
+
+.selbar{background:#fff;border-bottom:1px solid var(--cinza-borda);padding:12px 30px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+.selbar label{font-size:11px;font-weight:700;color:var(--cinza-texto);text-transform:uppercase;letter-spacing:.06em}
+.selbar select{background:var(--cinza-fundo);color:var(--preto);border:1px solid var(--cinza-borda);border-radius:9px;padding:10px 16px;font-size:15px;font-weight:600;cursor:pointer;min-width:280px}
+
+.wrap{max-width:1200px;margin:0 auto;padding:26px 30px}
+.sec-lbl{font-size:11px;font-weight:700;color:var(--cinza-texto);text-transform:uppercase;letter-spacing:.12em;margin:26px 0 14px}
+.sec-lbl:first-child{margin-top:0}
+
+/* metas equipe (foguete) */
+.metas3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.meta-card{background:#fff;border-radius:14px;padding:22px;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+.meta-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--bordo)}
+.meta-card.atingida::before{background:var(--verde)}
+.meta-lbl{font-size:11px;font-weight:700;color:var(--cinza-texto);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.meta-nums{display:flex;align-items:baseline;gap:6px;margin-bottom:18px}
+.meta-atual{font-size:40px;font-weight:700;color:var(--preto);line-height:1}
+.meta-sep{font-size:22px;color:var(--cinza-borda);font-weight:300}
+.meta-total{font-size:22px;font-weight:600;color:var(--cinza-texto)}
+.meta-unid{font-size:12px;color:var(--cinza-texto);margin-left:6px}
+.fog-track{height:30px;background:var(--cinza-fundo);border-radius:15px;position:relative;overflow:visible;margin-bottom:10px}
+.fog-fill{height:100%;border-radius:15px;background:linear-gradient(90deg,var(--bordo-esc),var(--bordo));transition:width 1.2s cubic-bezier(.4,0,.2,1);position:relative;min-width:30px}
+.fog-fill.verde{background:linear-gradient(90deg,#15803d,var(--verde))}
+.fog-emoji{position:absolute;right:-13px;top:50%;font-size:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2));animation:foguete-float 2s ease-in-out infinite}
+.fog-fill.verde .fog-emoji{animation:none;transform:translateY(-50%) rotate(-45deg)}
+.meta-foot{display:flex;justify-content:space-between;align-items:center;font-size:11px;font-weight:600;color:var(--cinza-texto)}
+.meta-foot .pct{color:var(--bordo);font-weight:700}
+.meta-foot.verde .pct{color:var(--verde)}
+.badge-win{display:inline-flex;align-items:center;gap:4px;background:var(--verde-suave);color:var(--verde);font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase}
+
+/* cards de pessoa (visão geral) */
+.pessoas2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pcard{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.pcard-head{background:linear-gradient(135deg,var(--bordo),var(--bordo-esc));padding:20px 22px;display:flex;align-items:center;gap:16px}
+.pcard-foto{width:56px;height:56px;border-radius:50%;object-fit:cover;object-position:center top;border:3px solid rgba(255,255,255,.3)}
+.pcard-nome{font-size:19px;font-weight:800;color:#fff}
+.pcard-cargo{font-size:11px;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.pcard-body{padding:20px 22px}
+.gatilho{border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-weight:700}
+.gatilho.pend{background:var(--laranja-suave);color:var(--laranja)}
+.gatilho.ok{background:var(--verde-suave);color:var(--verde)}
+.gatilho-lbl{font-size:12px;text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:7px}
+.gatilho-val{font-size:16px}
+.stat4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat-b{background:var(--cinza-fundo);border-radius:10px;padding:14px 8px;text-align:center}
+.stat-n{font-size:26px;font-weight:700;line-height:1}
+.stat-l{font-size:9px;color:var(--cinza-texto);text-transform:uppercase;letter-spacing:.04em;margin-top:5px}
+.class-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin:4px 0 8px}
+.class-lbl.voi{color:var(--bordo)}.class-lbl.ccc{color:var(--cinza-texto)}
+.class-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.class-box{background:rgba(155,27,58,.08);border-radius:8px;padding:8px 12px;text-align:center;min-width:42px}
+.class-box.ccc{background:var(--cinza-fundo)}
+.class-n{font-size:18px;font-weight:700;color:var(--bordo)}
+.class-box.ccc .class-n{color:var(--cinza-texto)}
+.class-c{font-size:9px;color:var(--cinza-texto);margin-top:1px}
+
+/* visão individual */
+.hero{background:#fff;border-radius:18px;padding:28px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:22px;border-top:5px solid var(--bordo)}
+.hero.ok{border-top-color:var(--verde)}
+.hero-top{display:flex;align-items:center;gap:18px;margin-bottom:22px}
+.hero-foto{width:64px;height:64px;border-radius:50%;object-fit:cover;object-position:center top;border:3px solid var(--bordo)}
+.hero-nome{font-size:24px;font-weight:800}
+.hero-cargo{font-size:11px;color:var(--cinza-texto);text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
+.piso-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px}
+.piso-t{font-size:13px;color:var(--cinza-texto)}
+.piso-n{font-size:34px;font-weight:700;line-height:1}
+.piso-n small{font-size:16px;color:var(--cinza-texto);font-weight:600}
+.piso-msg{margin-top:14px;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+.piso-msg.lock{color:var(--laranja)}.piso-msg.ok{color:var(--verde)}
+.ind-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.ind-stat{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.ind-l{font-size:10px;color:var(--cinza-texto);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+.ind-n{font-size:30px;font-weight:700;line-height:1}
+.ind-s{font-size:10px;color:var(--cinza-texto);margin-top:5px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:#fff;border-radius:14px;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.card-t{font-size:11px;font-weight:700;color:var(--cinza-texto);text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px}
+.mrow{margin-bottom:16px}.mrow:last-child{margin-bottom:0}
+.mrow-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.mrow-nome{font-size:13px;color:var(--preto)}
+.mrow-frac{font-size:13px;font-weight:700}
+.mrow-bar{height:10px;background:var(--cinza-fundo);border-radius:5px;overflow:hidden}
+.mrow-fill{height:100%;border-radius:5px;transition:width .8s}
+.mrow-note{font-size:10px;color:var(--cinza-texto);margin-top:6px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.bar-lbl{font-size:12px;color:var(--cinza-texto);width:190px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-tr{flex:1;height:9px;background:var(--cinza-fundo);border-radius:4px;overflow:hidden}
+.bar-fl{height:100%;border-radius:4px;background:var(--bordo)}
+.bar-n{font-size:13px;font-weight:700;width:26px;text-align:right;flex-shrink:0}
+.conv-big{font-size:52px;font-weight:700;line-height:1;text-align:center}
+.conv-sub{font-size:11px;color:var(--cinza-texto);text-transform:uppercase;letter-spacing:.05em;text-align:center;margin-top:6px}
+
+.dia{background:#fff;border-radius:14px;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-top:22px}
+.dia-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+.dia-ref{font-size:11px;color:var(--cinza-texto)}
+.diagrid{display:grid;gap:14px}
+
+.assin-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--cinza-fundo)}
+.assin-row:last-of-type{border-bottom:none}
+.assin-sub{font-size:11px;color:var(--cinza-texto);margin-top:2px}
+.assin-tag{font-size:10px;font-weight:700;color:var(--laranja);background:var(--laranja-suave);padding:3px 10px;border-radius:20px;text-transform:uppercase;flex-shrink:0}
+.empty{text-align:center;padding:70px 20px;color:var(--cinza-texto)}
+.empty-big{font-size:44px;margin-bottom:14px}
+.ts{text-align:right;font-size:10px;color:var(--cinza-texto);padding:16px 30px 0}
+@media(max-width:860px){.metas3{grid-template-columns:1fr}.pessoas2{grid-template-columns:1fr}.two{grid-template-columns:1fr}.ind-grid{grid-template-columns:repeat(2,1fr)}.stat4{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-left">
+    <img src="https://rafael-voi.github.io/voi-dashboards/Logo VOI Advogados_Prancheta 1.jpg" class="logo-img" alt="VOI">
+    <div>
+      <div class="top-title">Painel Comercial — VOI Advogados</div>
+      <div class="top-sub">Metas e resultados da equipe comercial · Unidade VOI</div>
+    </div>
+  </div>
+  <div class="top-right">
+    <div class="top-mes" id="mes">—</div>
+    <div class="top-atual mono" id="atual">—</div>
+  </div>
+</div>
+
+<div class="selbar">
+  <label for="sel">Ver:</label>
+  <select id="sel" onchange="render()">
+    <option value="geral-sdr">📺 Visão Geral — SDR (TV)</option>
+    <option value="geral-closer">📺 Visão Geral — Closers (TV)</option>
+  </select>
+</div>
+
+<div class="wrap" id="conteudo"><div class="empty"><div class="empty-big">⏳</div>Carregando...</div></div>
+<div class="ts mono" id="ts"></div>
+
+<script>
+const JSON_URL='https://rafael-voi.github.io/voi-dashboards/dashboard_comercial_voi_data.json';
+const BASE='https://rafael-voi.github.io/voi-dashboards/';
+const META_PISO=15;
+let D=null;
+
+function esc(s){return String(s==null?'':s);}
+function pr(n){return esc(n).split(' ')[0];}
+function fmtDataHora(d){if(!d)return '';const m=String(d).match(/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/);return m?`${m[3]}/${m[2]}/${m[1]}, ${m[4]}:${m[5]}`:String(d).substring(0,16);}
+function foto(nome){
+  const n=nome.toLowerCase();
+  if(n.includes('maria isabella'))return BASE+'Maria Isabella.jpeg';
+  if(n.includes('isabella')||n.includes('pozza'))return BASE+'Isabela.jpeg';
+  if(n.includes('vinicius'))return BASE+'vinicius.jpeg';
+  if(n.includes('patricia'))return BASE+'patricia.jpeg';
+  if(n.includes('douglas'))return BASE+'douglas.jpeg';
+  return '';
+}
+function classePills(dic,ccc){
+  const ord=['C1','C2','C3','C4','C5'];
+  const items=Object.keys(dic||{}).map(k=>{const m=k.match(/C[1-5]/);return {c:m?m[0]:'',n:dic[k]};}).filter(x=>x.c).sort((a,b)=>ord.indexOf(a.c)-ord.indexOf(b.c));
+  if(!items.length)return '<div style="font-size:11px;color:var(--cinza-texto)">—</div>';
+  return '<div class="class-row">'+items.map(x=>`<div class="class-box ${ccc?'ccc':''}"><div class="class-n">${x.n}</div><div class="class-c">${x.c}</div></div>`).join('')+'</div>';
+}
+
+async function carregar(){
+  try{
+    const r=await fetch(JSON_URL+'?v='+Date.now());
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    D=await r.json();
+    const per=D.periodo||{};
+    document.getElementById('mes').textContent=per.mes_referencia||'';
+    document.getElementById('atual').textContent='atualizado: '+fmtDataHora(D.atualizado_em);
+    document.getElementById('ts').textContent='Última atualização: '+fmtDataHora(D.atualizado_em);
+    // popular seletor
+    const sel=document.getElementById('sel');
+    const sep1=document.createElement('option');sep1.disabled=true;sep1.textContent='──── SDRs ────';sel.appendChild(sep1);
+    (D.sdrs||[]).forEach(s=>{const o=document.createElement('option');o.value='sdr:'+s.nome;o.textContent='👤 '+s.nome+' (SDR)';sel.appendChild(o);});
+    const sep2=document.createElement('option');sep2.disabled=true;sep2.textContent='──── Closers ────';sel.appendChild(sep2);
+    (D.closers||[]).forEach(c=>{const o=document.createElement('option');o.value='closer:'+c.nome;o.textContent='👤 '+c.nome+' (Closer)';sel.appendChild(o);});
+    render();
+  }catch(e){
+    document.getElementById('conteudo').innerHTML='<div class="empty">⚠️ Não foi possível carregar os dados.<br><small>'+e.message+'</small></div>';
+  }
+}
+
+function foguete(atual,meta,label,sublabel,unidade){
+  const pct=Math.min(100,Math.round(atual/meta*100));
+  const ok=atual>=meta;
+  return `<div class="meta-card ${ok?'atingida':''}">
+    <div class="meta-lbl">${label} ${ok?'<span class="badge-win">✅ batida</span>':''}</div>
+    <div class="meta-nums"><span class="meta-atual mono">${atual}</span><span class="meta-sep">/</span><span class="meta-total mono">${meta}</span><span class="meta-unid">${unidade}</span></div>
+    <div class="fog-track"><div class="fog-fill ${ok?'verde':''}" style="width:${Math.max(6,pct)}%"><span class="fog-emoji">🚀</span></div></div>
+    <div class="meta-foot ${ok?'verde':''}"><span>${sublabel}</span><span class="pct">${pct}%</span></div>
+  </div>`;
+}
+
+function render(){
+  const v=document.getElementById('sel').value;
+  const box=document.getElementById('conteudo');
+  if(!D){box.innerHTML='<div class="empty">Sem dados.</div>';return;}
+  if(v==='geral-sdr')return renderGeralSdr(box);
+  if(v==='geral-closer')return renderGeralCloser(box);
+  if(v.startsWith('sdr:'))return renderSdrInd(box,v.slice(4));
+  if(v.startsWith('closer:'))return renderCloserInd(box,v.slice(7));
+}
+
+// ===== VISÃO GERAL SDR (TV) =====
+function renderGeralSdr(box){
+  const m=D.metas||{}, sdrM=m.sdr||{};
+  const vol=sdrM.volume||{meta:50,atual:0};
+  const ag=sdrM.agendamentos||{meta:67,atual:0};
+  const f=D.funil||{};
+  const voiColetivo=f.contratos_unidade_voi||0;
+  box.innerHTML=`
+  <div class="sec-lbl">Metas do mês — equipe</div>
+  <div class="metas3">
+    ${foguete(voiColetivo,30,'🔒 Gatilho de comissionamento','Cada SDR precisa de 15 contratos VOI','contratos VOI')}
+    ${foguete(vol.atual,vol.meta,'📈 Meta de volume — coletiva','Bônus coletivo R$200 por SDR','contratos VOI no mês')}
+    ${foguete(ag.atual,ag.meta,'📅 Meta de agendamentos — coletiva','Bônus +15% sobre comissões do mês','atendimentos únicos')}
+  </div>
+  <div class="sec-lbl">Por SDR</div>
+  <div class="pessoas2">
+    ${(D.sdrs||[]).map(s=>cardSdr(s)).join('')}
+  </div>`;
+}
+function cardSdr(s){
+  const voi=s.contratos_voi||0, ok=voi>=META_PISO;
+  const ft=foto(s.nome);
+  return `<div class="pcard">
+    <div class="pcard-head">${ft?`<img src="${ft}" class="pcard-foto" onerror="this.style.display='none'">`:''}<div><div class="pcard-nome">${esc(s.nome)}</div><div class="pcard-cargo">SDR · Unidade VOI</div></div></div>
+    <div class="pcard-body">
+      <div class="gatilho ${ok?'ok':'pend'}"><span class="gatilho-lbl">${ok?'✅ gatilho ativado':'⏳ gatilho pendente'}</span><span class="gatilho-val mono">${voi}/${META_PISO} contratos VOI</span></div>
+      <div class="stat4">
+        <div class="stat-b"><div class="stat-n mono">${s.clientes_unicos||0}</div><div class="stat-l">Atendidos</div></div>
+        <div class="stat-b"><div class="stat-n mono">${s.agendou_closer||0}</div><div class="stat-l">Agendou closer</div></div>
+        <div class="stat-b"><div class="stat-n mono" style="color:var(--bordo)">${voi}</div><div class="stat-l">Fechou VOI</div></div>
+        <div class="stat-b"><div class="stat-n mono">${s.contratos_ccc||0}</div><div class="stat-l">Fechou CCC</div></div>
+      </div>
+      <div class="class-lbl" style="color:var(--cinza-texto)">Contratos por classificação</div>
+      <div class="class-lbl voi">Unidade VOI</div>${classePills(s.classificacao_voi)}
+      <div class="class-lbl ccc">CCC / Parceiros</div>${classePills(s.classificacao_ccc,true)}
+    </div>
+  </div>`;
+}
+
+// ===== VISÃO GERAL CLOSER (TV) =====
+function renderGeralCloser(box){
+  const m=D.metas||{}, clM=m.closer||{};
+  const conv=clM.conversao_coletiva||{taxa_pct:0};
+  const vol=clM.volume||{meta:100,atual:0};
+  const taxa=conv.taxa_pct||0;
+  const faixaOk=taxa>=75;
+  box.innerHTML=`
+  <div class="sec-lbl">Metas do mês — equipe de closers</div>
+  <div class="metas3">
+    ${foguete(taxa,75,'🎯 Conversão coletiva','Faixa de bônus começa em 75%','% (compareceu→fechou)')}
+    ${foguete(vol.atual,vol.meta,'📈 Volume de fechados','Bônus coletivo R$200 por closer','contratos VOI+CCC')}
+    <div class="meta-card"><div class="meta-lbl">💰 Faixas de bônus</div>
+      <div style="font-size:13px;line-height:2;color:var(--preto)">
+        <div style="${taxa>=75&&taxa<=84?'font-weight:700;color:var(--bordo)':''}">75–84% → R$ 350</div>
+        <div style="${taxa>=85&&taxa<=95?'font-weight:700;color:var(--bordo)':''}">85–95% → R$ 600</div>
+        <div style="${taxa>=96?'font-weight:700;color:var(--verde)':''}">96%+ → R$ 900</div>
+        <div style="color:var(--cinza-texto)">Piso individual: 60%</div>
+      </div>
+    </div>
+  </div>
+  <div class="sec-lbl">Por closer</div>
+  <div class="pessoas2">
+    ${(D.closers||[]).map(c=>cardCloser(c)).join('')}
+  </div>`;
+}
+function cardCloser(c){
+  const ok=c.acima_minimo_individual;
+  const ft=foto(c.nome);
+  return `<div class="pcard">
+    <div class="pcard-head">${ft?`<img src="${ft}" class="pcard-foto" onerror="this.style.display='none'">`:''}<div><div class="pcard-nome">${esc(c.nome)}</div><div class="pcard-cargo">Closer</div></div></div>
+    <div class="pcard-body">
+      <div class="gatilho ${ok?'ok':'pend'}"><span class="gatilho-lbl">${ok?'✅ acima do piso':'⏳ abaixo do piso'} de 60%</span><span class="gatilho-val mono">${c.taxa_fechamento_pct}% conversão</span></div>
+      <div class="stat4">
+        <div class="stat-b"><div class="stat-n mono">${c.total_atendidos||0}</div><div class="stat-l">Atendimentos</div></div>
+        <div class="stat-b"><div class="stat-n mono">${c.compareceram||0}</div><div class="stat-l">Compareceram</div></div>
+        <div class="stat-b"><div class="stat-n mono" style="color:var(--bordo)">${c.contratos_fechados||0}</div><div class="stat-l">Fechados</div></div>
+        <div class="stat-b"><div class="stat-n mono">${c.nao_compareceu||0}</div><div class="stat-l">Não comp.</div></div>
+      </div>
+      <div class="class-lbl voi">Contratos fechados por classificação</div>${classePills(c.classificacoes)}
+      ${(c.fichas_vazias>0||c.captacao_vazia>0)?`<div class="mrow-note" style="color:var(--laranja)">⚠️ ${c.fichas_vazias} ficha(s) e ${c.captacao_vazia} captação(ões) por preencher</div>`:''}
+    </div>
+  </div>`;
+}
+
+// ===== SDR INDIVIDUAL =====
+function renderSdrInd(box,nome){
+  const s=(D.sdrs||[]).find(x=>x.nome===nome);
+  if(!s){box.innerHTML='<div class="empty">Sem dados para '+esc(nome)+'.</div>';return;}
+  const voi=s.contratos_voi||0, ok=voi>=META_PISO;
+  const pct=Math.min(100,Math.round(voi/META_PISO*100)), faltam=Math.max(0,META_PISO-voi);
+  const m=D.metas||{}, sdrM=m.sdr||{};
+  const vol=sdrM.volume||{meta:50,atual:0}, ag=sdrM.agendamentos||{meta:67,atual:0};
+  const origArr=Object.keys(s.origem||{}).map(k=>({o:k,n:s.origem[k]})).sort((a,b)=>b.n-a.n).slice(0,6);
+  const maxO=origArr.length?origArr[0].n:1;
+  const ft=foto(s.nome);
+  box.innerHTML=`
+  <div class="hero ${ok?'ok':''}">
+    <div class="hero-top">${ft?`<img src="${ft}" class="hero-foto" onerror="this.style.display='none'">`:''}<div><div class="hero-nome">${esc(s.nome)} 👋</div><div class="hero-cargo">SDR · Unidade VOI</div></div></div>
+    <div class="piso-head"><div class="piso-t">Meu progresso no gatilho de comissão</div><div class="piso-n mono">${voi}<small>/${META_PISO} VOI</small></div></div>
+    <div class="fog-track"><div class="fog-fill ${ok?'verde':''}" style="width:${Math.max(6,pct)}%"><span class="fog-emoji">🚀</span></div></div>
+    <div class="piso-msg ${ok?'ok':'lock'}">${ok?'🎉 Gatilho batido! Sua comissão do mês está ativada.':`🔒 Faltam <b style="margin:0 4px">${faltam}</b> contrato${faltam>1?'s':''} VOI para destravar sua comissão.`}</div>
+  </div>
+  <div class="ind-grid">
+    <div class="ind-stat"><div class="ind-l">Clientes atendidos</div><div class="ind-n mono">${s.clientes_unicos||0}</div><div class="ind-s">únicos no mês</div></div>
+    <div class="ind-stat"><div class="ind-l">Agendei p/ closer</div><div class="ind-n mono" style="color:var(--bordo)">${s.agendou_closer||0}</div><div class="ind-s">${s.agendadora_concluidos||0} já atendidos</div></div>
+    <div class="ind-stat"><div class="ind-l">Fechei — VOI</div><div class="ind-n mono" style="color:var(--verde)">${voi}</div><div class="ind-s">contam no gatilho</div></div>
+    <div class="ind-stat"><div class="ind-l">Fechei — CCC</div><div class="ind-n mono">${s.contratos_ccc||0}</div><div class="ind-s">não contam no gatilho</div></div>
+  </div>
+  <div class="two">
+    <div class="card">
+      <div class="card-t">Metas da equipe SDR</div>
+      <div class="mrow"><div class="mrow-top"><span class="mrow-nome">🚀 Volume de contratos VOI</span><span class="mrow-frac" style="color:${vol.atingido?'var(--verde)':'var(--bordo)'}">${vol.atual}/${vol.meta}</span></div><div class="mrow-bar"><div class="mrow-fill" style="width:${Math.min(100,Math.round(vol.atual/vol.meta*100))}%;background:${vol.atingido?'var(--verde)':'var(--bordo)'}"></div></div><div class="mrow-note">${vol.atingido?'✅ Meta batida — bônus de volume ativado!':`Faltam ${Math.max(0,vol.meta-vol.atual)} para a equipe bater a meta.`}</div></div>
+      <div class="mrow"><div class="mrow-top"><span class="mrow-nome">📅 Agendamentos únicos</span><span class="mrow-frac" style="color:${ag.atingido?'var(--verde)':'var(--bordo)'}">${ag.atual}/${ag.meta}</span></div><div class="mrow-bar"><div class="mrow-fill" style="width:${Math.min(100,Math.round(ag.atual/ag.meta*100))}%;background:${ag.atingido?'var(--verde)':'var(--bordo)'}"></div></div><div class="mrow-note">${ag.atingido?'✅ Gatilho batido — bônus +15% ativado!':`Faltam ${Math.max(0,ag.meta-ag.atual)} agendamentos para o bônus de +15%.`}</div></div>
+    </div>
+    <div class="card">
+      <div class="card-t">De onde vêm meus clientes</div>
+      ${origArr.map(o=>`<div class="bar-row"><div class="bar-lbl" title="${esc(o.o)}">${esc(o.o).replace('Unidade VOI - ','').replace('CCC - ','CCC ')}</div><div class="bar-tr"><div class="bar-fl" style="width:${Math.round(o.n/maxO*100)}%"></div></div><div class="bar-n mono">${o.n}</div></div>`).join('')}
+    </div>
+  </div>
+  ${cardAssinaturaSdr(s.nome)}`;
+}
+
+// nomes no pendente (Rel3) são completos; casa com o nome curto do seletor
+function mesmapessoa(nomeCompleto,nomeSel){
+  const a=esc(nomeCompleto).toLowerCase(), b=esc(nomeSel).toLowerCase();
+  const bp=b.split(' ');
+  return bp.every(p=>a.includes(p));
+}
+function cardAssinaturaSdr(nome){
+  const pend=(D.alertas&&D.alertas.fase_contratacao_pendente||[]).filter(p=>p.sdr===nome);
+  return blocoAssinatura(pend,'os clientes que você agendou','Cobre o closer ou o cliente para assinar.');
+}
+function cardAssinaturaCloser(nome){
+  const pend=(D.alertas&&D.alertas.fase_contratacao_pendente||[]).filter(p=>mesmapessoa(p.closer,nome));
+  return blocoAssinatura(pend,'seus atendimentos','Cobre o cliente para assinar o contrato.');
+}
+function blocoAssinatura(pend,dequem,acao){
+  if(!pend.length)return `<div class="card" style="margin-top:22px"><div class="card-t">⏳ Aguardando assinatura</div><div style="font-size:13px;color:var(--verde)">✅ Nenhum contrato ${dequem} está aguardando assinatura.</div></div>`;
+  return `<div class="card" style="margin-top:22px;border-left:4px solid var(--laranja)">
+    <div class="card-t" style="color:var(--laranja)">⏳ Aguardando assinatura — ${pend.length} de ${dequem}</div>
+    ${pend.map(p=>`<div class="assin-row"><div><b>${esc(p.cliente)}</b><div class="assin-sub">closer: ${esc(pr(p.closer))}${p.sdr?' · agendado por '+esc(pr(p.sdr)):''}</div></div><div class="assin-tag">fase 1</div></div>`).join('')}
+    <div class="mrow-note" style="margin-top:10px;color:var(--laranja)">${acao}</div>
+  </div>`;
+}
+
+// ===== CLOSER INDIVIDUAL =====
+function renderCloserInd(box,nome){
+  const c=(D.closers||[]).find(x=>x.nome===nome);
+  if(!c){box.innerHTML='<div class="empty">Sem dados para '+esc(nome)+'.</div>';return;}
+  const ok=c.acima_minimo_individual, taxa=c.taxa_fechamento_pct||0;
+  const ft=foto(c.nome);
+  const dia=c.diario||{};
+  box.innerHTML=`
+  <div class="hero ${ok?'ok':''}">
+    <div class="hero-top">${ft?`<img src="${ft}" class="hero-foto" onerror="this.style.display='none'">`:''}<div><div class="hero-nome">${esc(c.nome)} 👋</div><div class="hero-cargo">Closer</div></div></div>
+    <div class="piso-head"><div class="piso-t">Minha conversão do mês (compareceu → fechou)</div></div>
+    <div class="conv-big" style="color:${ok?'var(--verde)':'var(--laranja)'}">${taxa}%</div>
+    <div class="conv-sub">${c.contratos_fechados} fechados de ${c.compareceram} que compareceram</div>
+    <div class="piso-msg ${ok?'ok':'lock'}" style="justify-content:center;margin-top:16px">${ok?'✅ Acima do piso individual de 60%':'⏳ Abaixo do piso individual de 60% — precisa subir para qualificar ao bônus'}</div>
+  </div>
+  <div class="ind-grid">
+    <div class="ind-stat"><div class="ind-l">Atendimentos</div><div class="ind-n mono">${c.total_atendidos||0}</div><div class="ind-s">no mês</div></div>
+    <div class="ind-stat"><div class="ind-l">Compareceram</div><div class="ind-n mono" style="color:var(--bordo)">${c.compareceram||0}</div><div class="ind-s">base da conversão</div></div>
+    <div class="ind-stat"><div class="ind-l">Fechados</div><div class="ind-n mono" style="color:var(--verde)">${c.contratos_fechados||0}</div><div class="ind-s">${c.contratos_voi||0} VOI · ${c.contratos_ccc||0} CCC</div></div>
+    <div class="ind-stat"><div class="ind-l">Não compareceram</div><div class="ind-n mono">${c.nao_compareceu||0}</div><div class="ind-s">fora da conversão</div></div>
+  </div>
+  <div class="two">
+    <div class="card">
+      <div class="card-t">Contratos fechados por classificação</div>
+      ${classePills(c.classificacoes)}
+      <div class="mrow-note" style="margin-top:14px">Cada classe representa o tempo de vínculo do cliente — C1 (até 3 meses) a C5 (+3 anos).</div>
+    </div>
+    <div class="card">
+      <div class="card-t">Pendências de preenchimento</div>
+      ${(c.fichas_vazias>0||c.captacao_vazia>0)?`
+        <div class="mrow"><div class="mrow-top"><span class="mrow-nome">📋 Fichas de atendimento em branco</span><span class="mrow-frac" style="color:var(--laranja)">${c.fichas_vazias||0}</span></div></div>
+        <div class="mrow"><div class="mrow-top"><span class="mrow-nome">✍️ Resultado de captação em branco</span><span class="mrow-frac" style="color:var(--laranja)">${c.captacao_vazia||0}</span></div></div>
+        <div class="mrow-note" style="color:var(--laranja)">⚠️ Atendimentos concluídos sem resultado preenchido. Cobrar preenchimento.</div>
+      `:'<div style="font-size:13px;color:var(--verde)">✅ Nenhuma pendência de preenchimento. Tudo registrado.</div>'}
+    </div>
+  </div>
+  <div class="dia">
+    <div class="dia-head"><div class="card-t" style="margin:0">Controle do dia anterior</div><div class="dia-ref mono">Ref: ${esc(dia.data||'—')}</div></div>
+    <div class="ind-grid" style="margin:0">
+      <div class="ind-stat"><div class="ind-l">Agendados</div><div class="ind-n mono">${dia.agendados||0}</div></div>
+      <div class="ind-stat"><div class="ind-l">Compareceram</div><div class="ind-n mono" style="color:var(--verde)">${dia.compareceram||0}</div></div>
+      <div class="ind-stat"><div class="ind-l">Faltaram</div><div class="ind-n mono" style="color:var(--laranja)">${dia.faltaram||0}</div></div>
+      <div class="ind-stat"><div class="ind-l">Assinados</div><div class="ind-n mono" style="color:var(--bordo)">${dia.assinados||0}</div></div>
+    </div>
+  </div>
+  ${cardAssinaturaCloser(c.nome)}`;
+}
+
+carregar();
+</script>
+</body>
+</html>
